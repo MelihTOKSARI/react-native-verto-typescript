@@ -9,8 +9,11 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.11",
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "react-native-background-timer": "^2.4.1",
+    "react-native-webrtc": "^1.92.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

@@ -1,0 +1,16 @@
+export default interface ModerationCallbacks {
+  toBeNotDeaf: Function,
+  toBeDeaf: Function,
+  toBeKickedOut: Function,
+  toToggleMicrophone: Function,
+  toToggleCamera: Function,
+  toBePresenter: Function,
+  toBeVideoFloor: Function,
+  toHaveVideoBannerAs: Function,
+  toCleanVideoBanner: Function,
+  toIncreaseVolumeOutput: Function,
+  toDecreaseVolumeOutput: Function,
+  toIncreaseVolumeInput: Function,
+  toDecreaseVolumeInput: Function,
+  toTransferTo: Function,
+}

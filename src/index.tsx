@@ -1,3 +1,4 @@
+/*
 import {
   requireNativeComponent,
   UIManager,
@@ -24,3 +25,27 @@ export const VertoTypescriptView =
     : () => {
         throw new Error(LINKING_ERROR);
       };
+*/
+
+import Call from './verto-sdk/verto/Call';
+import ConferenceLiveArray from './verto-sdk/conference/ConferenceLiveArray';
+import LoginScreen from './verto-sdk/vertoView/LoginScreen';
+import MakeCallParams from './verto-sdk/models/Call/MakeCallParams';
+import MediaState from './verto-sdk/enums/MediaState.enum';
+import VertoClient from './verto-sdk/verto/VertoClient';
+import VertoParams from './verto-sdk/models/VertoParams';
+import VertoView from './verto-sdk/vertoView/index';
+import ViewType from './verto-sdk/enums/ViewType.enum';
+
+export {
+    Call,
+    ConferenceLiveArray,
+    LoginScreen,
+    MakeCallParams,
+    MediaState,
+    VertoClient,
+    VertoParams,
+    ViewType,
+    VertoView
+};
+      
