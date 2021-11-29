@@ -1,6 +1,6 @@
 {
   "name": "react-native-verto-typescript",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "React native package for verto with typescript support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -69,7 +69,9 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-background-timer": "^2.4.1",
+    "react-native-webrtc": ">=1.87.3"
   },
   "jest": {
     "preset": "react-native",
@@ -143,9 +145,5 @@
         }
       ]
     ]
-  },
-  "dependencies": {
-    "react-native-background-timer": "^2.4.1",
-    "react-native-webrtc": "^1.92.2"
   }
 }
