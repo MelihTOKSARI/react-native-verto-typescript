@@ -7,9 +7,11 @@ import {
 
 // import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoParams, VertoView, ViewType } from 'react-native-verto-typescript';
 
-import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoParams, VertoView, ViewType } from 'react-native-verto-typescript';
+import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoInstanceManager, VertoParams, VertoView, ViewType } from 'react-native-verto-typescript';
 
 const App = () => {
+
+  const [vertoClient, setVertoClient] = useState(null);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [vertoParams, setVertoParams] = useState({
@@ -24,6 +26,7 @@ const App = () => {
       useSpeaker: 'any '
     },
     videoParams: { minWidth: 320, maxWidth: 640, minHeight: 180, maxHeight: 480 },
+    // videoParams: {},
     remoteVideo: 'remote-video',
     localVideo: 'local-video',
     iceServers: true
@@ -39,49 +42,33 @@ const App = () => {
   
   useEffect(() => {
     checkLoginParams();
-    setTimeout(() => {
-       setCallState('call');
-    }, 200);
-    // setTimeout(() => {
-    //   setCameraState(false);
-    // }, 10000);
-    // setTimeout(() => {
-    //   setAudioState(false);
-    // }, 20000);
-    // setTimeout(() => {
-    //   setCameraState(true);
-    // }, 30000);
-    // setTimeout(() => {
-    //   setAudioState(true);
-    // }, 40000);
   }, [])
 
   const callbacks = {
     onPrivateEvent: (vertoClient: VertoClient, dataParams: VertoParams, userData: ConferenceLiveArray) => {
-      console.log('onPrivateEvent');
+      console.log('[example] onPrivateEvent');
     },
     onEvent: (vertoClient: VertoClient, dataParams: VertoParams, userData: ConferenceLiveArray) => {
-      console.log('onEvent');
+      console.log('[example] onEvent');
     },
     onCallStateChange: (state: any) => {
-      console.log('onCallStateChange state.current.name:', state.current.name);
-      if(state.current.name == 'active') {
-        console.log('onCallStateChange 1');
-      } else {
-        console.log('onCallStateChange 2');
-      }
+      console.log('[example] onCallStateChange state.current.name:', state.current.name);
     },
     onInfo: (params: any) => {
-      console.log('onInfo');
+      console.log('[example] onInfo');
     },
     onClientReady: (params: any) => {
-      console.log('onClientReady');
+      console.log('[example] onClientReady');
+      setLoggedIn(true);
+      setTimeout(() => {
+        setCallState('call');
+      }, 200);
     },
     onDisplay: (params: any) => {
-      console.log('onDisplay params:', params);
+      console.log('[example] onDisplay params:', params);
     },
     onNewCall: (call: Call) => {
-      console.log('onNewCall=>', call);
+      console.log('[example] onNewCall=>', call);
       setTimeout(() => {
         call.answer()
       }, 2000);
@@ -97,6 +84,16 @@ const App = () => {
       
       if(loginParams.password) {
         setLoggedIn(true);
+
+        const tmpVertoClient = VertoInstanceManager.createInstance(
+          {
+            ...vertoParams,
+            webSocket: loginParams
+          }, 
+          callbacks
+        )
+    
+        setVertoClient(tmpVertoClient);
       }
     }
   }
@@ -116,13 +113,24 @@ const App = () => {
       return;
     }
 
-    setVertoAuthParams({ login, password, url });
+    const authParams = { login, password, url };
+    setVertoAuthParams(authParams);
+    
+    const tmpVertoClient = VertoInstanceManager.createInstance(
+      {
+        ...vertoParams,
+        webSocket: authParams
+      }, 
+      callbacks
+    )
 
-    setLoggedIn(true);
+    setVertoClient(tmpVertoClient);
+
+    // setLoggedIn(true);
 
     AsyncStorage.setItem(
       'login', 
-      JSON.stringify({ login, password, url })
+      JSON.stringify(authParams)
     );
   }
 

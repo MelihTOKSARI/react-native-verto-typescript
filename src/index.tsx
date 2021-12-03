@@ -33,6 +33,7 @@ import LoginScreen from './verto-sdk/vertoView/LoginScreen';
 import MakeCallParams from './verto-sdk/models/Call/MakeCallParams';
 import MediaState from './verto-sdk/enums/MediaState.enum';
 import VertoClient from './verto-sdk/verto/VertoClient';
+import VertoInstanceManager from './verto-sdk/vertoView/VertoInstanceManager';
 import VertoParams from './verto-sdk/models/VertoParams';
 import VertoView from './verto-sdk/vertoView/index';
 import ViewType from './verto-sdk/enums/ViewType.enum';
@@ -44,6 +45,7 @@ export {
     MakeCallParams,
     MediaState,
     VertoClient,
+    VertoInstanceManager,
     VertoParams,
     ViewType,
     VertoView
