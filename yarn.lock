@@ -7538,7 +7538,7 @@
     "jscodeshift" "^0.11.0"
     "nullthrows" "^1.1.1"
 
-"react-native-webrtc@^1.92.2":
+"react-native-webrtc@>=1.87.3":
   "integrity" "sha512-eq8otVRvLBD/kSM53SPymyrI7sq06/qejwhiLQKVlUsxaXTKPf3C5lktXsnw5OGZUmVk7y5rH+8ZJ3k+422t6g=="
   "resolved" "https://registry.npmjs.org/react-native-webrtc/-/react-native-webrtc-1.92.2.tgz"
   "version" "1.92.2"
