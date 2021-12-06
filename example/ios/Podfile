@@ -8,6 +8,8 @@ target 'VertoTypescriptExample' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  # pod 'JitsiMeetSDK'
+
   pod 'react-native-verto-typescript', :path => '../..'
 
   # Enables Flipper.

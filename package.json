@@ -71,7 +71,8 @@
     "react": "*",
     "react-native": "*",
     "react-native-background-timer": "^2.4.1",
-    "react-native-webrtc": ">=1.87.3"
+    "react-native-webrtc": ">=1.87.3",
+    "uuid": "*"
   },
   "jest": {
     "preset": "react-native",
