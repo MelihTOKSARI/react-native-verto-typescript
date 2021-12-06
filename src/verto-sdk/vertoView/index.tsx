@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { MediaStream, MediaStreamTrack } from 'react-native-webrtc';
 import VertinhoClient from '../verto/VertoClient';
-import { defaultVertoCallbacks } from '../store';
 import styles from './styles';
-import VertoParams from '../models/VertoParams';
 import Call from '../verto/Call';
 import ViewType from '../enums/ViewType.enum';
 import ViewContainer from './ViewContainer';
@@ -15,8 +13,7 @@ import VertoInstanceManager from './VertoInstanceManager';
 let vertoClient: VertinhoClient;
 
 interface Props {
-  vertoParams: VertoParams,
-  callbacks: defaultVertoCallbacks,
+  viewKey: string,
   onLogoutClicked: Function,
   viewType: ViewType,
   indicatorColor?: string,
@@ -76,7 +73,7 @@ const VertoView = (props: Props) => {
 
   const getVertoClient = () => {
     if(!vertoClient) {
-      vertoClient = VertoInstanceManager.getInstance('key', {
+      vertoClient = VertoInstanceManager.getInstance(props.viewKey, {
         onCallStateChange,
         onNewCall,
         onPlayLocalVideo,
@@ -103,18 +100,18 @@ const VertoView = (props: Props) => {
       muteVideo(props.isCameraOff);
     }
 
-    if(props.callbacks.onCallStateChange) {
-      props.callbacks.onCallStateChange(state);
-    }
+    // if(props.callbacks.onCallStateChange) {
+    //   props.callbacks.onCallStateChange(state);
+    // }
   }
 
   const onNewCall = (call: Call) => {
     // console.log('[vertoView] onNewCall:', call);
     setCall(call);
     
-    if(props.callbacks.onNewCall) {
-      props.callbacks.onNewCall(call);
-    }
+    // if(props.callbacks.onNewCall) {
+    //   props.callbacks.onNewCall(call);
+    // }
   }
 
   const onPlayLocalVideo = (stream: MediaStream) => {
@@ -132,18 +129,18 @@ const VertoView = (props: Props) => {
       videoTrack.enabled = !props.isCameraOff;
     }
 
-    if(props.callbacks.onPlayLocalVideo) {
-      props.callbacks.onPlayLocalVideo(stream);
-    }
+    // if(props.callbacks.onPlayLocalVideo) {
+    //   props.callbacks.onPlayLocalVideo(stream);
+    // }
   }
 
   const onPlayRemoteVideo = (stream: MediaStream) => {
     // console.log('[vertoView] onPlayRemoteVideo stream.toURL:', stream.toURL());
     setRemoteStreamURL(stream.toURL());
 
-    if(props.callbacks.onPlayRemoteVideo) {
-      props.callbacks.onPlayRemoteVideo(stream);
-    }
+    // if(props.callbacks.onPlayRemoteVideo) {
+    //   props.callbacks.onPlayRemoteVideo(stream);
+    // }
   }
 
   //#endregion

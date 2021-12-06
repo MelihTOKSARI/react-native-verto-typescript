@@ -164,8 +164,7 @@ const App = () => {
           isCameraOff={cameraState}
           isToolboxVisible={false}
           viewType={ViewType.remote} 
-          vertoParams={vertoParams} 
-          callbacks={callbacks}
+          viewKey="view1"
           onLogoutClicked={onLogoutClicked}
         />
       }
