@@ -170,9 +170,7 @@ export default class Call {
         return Promise.reject(error);
       }),
       onNewCall: (call: Call) => {
-        console.log('onNewCall 1');
         if(this.verto && this.verto.callbacks && this.verto.callbacks.onNewCall) {
-          console.log('onNewCall 2');
           this.verto.callbacks.onNewCall(call);
         }
       }

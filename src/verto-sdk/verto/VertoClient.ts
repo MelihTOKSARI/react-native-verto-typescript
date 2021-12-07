@@ -182,10 +182,6 @@ export default class VertinhoClient {
 
   private socketReady(): boolean {
     if (this.webSocket === null || this.webSocket.readyState > 1) {
-      console.log('this.websocket is null?', (this.webSocket == null));
-      if(this.webSocket) {
-        console.log('this.websocket.readyState:', this.webSocket.readyState);
-      }
       return false;
     }
 
