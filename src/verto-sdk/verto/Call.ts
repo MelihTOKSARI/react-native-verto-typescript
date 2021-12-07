@@ -1,13 +1,13 @@
  import VertoRTC from '../webrtc/VertoRTC';
 import { generateGUID, ENUM } from './utils';
-import BackgroundTimer from 'react-native-background-timer';
+// import BackgroundTimer from 'react-native-background-timer';
 import VertinhoClient from './VertoClient';
 import CallStateItem from '../models/Call/CallStateItem';
 import CallParams from '../models/Call/CallParams';
 import VertoRTCMediaHandlers from '../models/VertoRTC/VertoRTCMediaHandlers';
 import { CallActions } from '../enums/CallActions.enum';
 
-BackgroundTimer.start();
+// BackgroundTimer.start();
 
 export default class Call {
 
