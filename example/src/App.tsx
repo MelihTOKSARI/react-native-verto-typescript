@@ -90,7 +90,8 @@ const App = () => {
             ...vertoParams,
             webSocket: loginParams
           }, 
-          callbacks
+          callbacks,
+          true
         )
     
         setVertoClient(tmpVertoClient);
@@ -121,7 +122,8 @@ const App = () => {
         ...vertoParams,
         webSocket: authParams
       }, 
-      callbacks
+      callbacks,
+      true
     )
 
     setVertoClient(tmpVertoClient);
@@ -163,9 +165,10 @@ const App = () => {
           isAudioOff={audioState}
           isCameraOff={cameraState}
           isToolboxVisible={false}
-          viewType={ViewType.remote} 
-          viewKey="view1"
           onLogoutClicked={onLogoutClicked}
+          showLogs={true}
+          viewKey="view1"
+          viewType={ViewType.remote} 
         />
       }
       {

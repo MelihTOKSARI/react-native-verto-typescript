@@ -1,5 +1,7 @@
 const printLog = (showLogs: boolean, ...logs: Array<any>) => {
-    showLogs && console.log(logs);
+    if(showLogs) {
+        console.log(logs);
+    }
 }
 
 export { printLog }
