@@ -16,6 +16,7 @@ class VertoInstance {
     public createInstance(params: VertoParams, callbacks: defaultVertoCallbacks, showLogs?: boolean): VertinhoClient {
         printLog(showLogs, '[vertoInstance] params:', params);
         if(!this.vertoClient) {
+            printLog(showLogs, '[vertoInstance] vertoClient is null and will be instantiated');
             this.vertoClient = new VertinhoClient(params, {
                 ...callbacks,
                 onCallStateChange: this.onCallStateChange,
@@ -24,6 +25,8 @@ class VertoInstance {
                 onPlayRemoteVideo: this.onPlayRemoteVideo
             });
             this.instanceCallbacks = callbacks;
+        } else {
+            printLog(showLogs, '[vertoInstance] vertoClient is already instantiated');
         }
 
         this.showLogs = showLogs;
