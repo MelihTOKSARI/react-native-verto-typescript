@@ -34,6 +34,7 @@ class VertoInstance {
     public destroy() {
         if(this.vertoClient) {
             this.vertoClient.destroy();
+            this.vertoClient = undefined;
         }
     }
 
