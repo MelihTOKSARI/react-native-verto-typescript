@@ -9,28 +9,31 @@ import ViewContainer from './ViewContainer';
 import MakeCallParams from '../models/Call/MakeCallParams';
 import { ToolboxImage } from '../enums/ToolboxImage.enum';
 import VertoInstanceManager from './VertoInstanceManager';
+import { printLog } from './utils';
 
 let vertoClient: VertinhoClient;
 
 interface Props {
-  viewKey: string,
-  onLogoutClicked: Function,
-  viewType: ViewType,
-  indicatorColor?: string,
-  callState?: string,
+  call?: Call,
   callParams?: MakeCallParams,
-  onAudioStateChanged?: Function,
-  onVideoStateChanged?: Function,
-  isAudioOff: boolean,
-  isCameraOff: boolean,
+  callState?: string,
   cameraFacing?: string,
-  isToolboxVisible?: boolean
+  indicatorColor?: string,
+  isCameraOff: boolean,
+  isAudioOff: boolean,
+  isToolboxVisible?: boolean,
+  onAudioStateChanged?: Function,
+  onLogoutClicked: Function,
+  onVideoStateChanged?: Function,
+  showLogs?: boolean,
+  viewKey: string,
+  viewType: ViewType
 }
 
 const VertoView = (props: Props) => {
   const [localStreamURL, setLocalStreamURL] = useState('');
   const [localStream, setLocalStream] = useState(null);
-  const [call, setCall] = useState(null);
+  // const [call, setCall] = useState(null);
   const [remoteStreamURL, setRemoteStreamURL] = useState('');
 
   const [isStreamStarted, setStreamStarted] = useState(false);
@@ -75,7 +78,7 @@ const VertoView = (props: Props) => {
     if(!vertoClient) {
       vertoClient = VertoInstanceManager.getInstance(props.viewKey, {
         onCallStateChange,
-        onNewCall,
+        // onNewCall,
         onPlayLocalVideo,
         onPlayRemoteVideo
       });
@@ -86,8 +89,11 @@ const VertoView = (props: Props) => {
 
   //#region Call Listener Methods
 
-  const onCallStateChange = (state: any) => {
-    // console.log('[vertoView] onCallStateChange => ', state);
+  const onCallStateChange = (viewKey: string, state: any) => {
+    if(viewKey !== props.viewKey) {
+      return;
+    }
+    printLog(props.showLogs, '[vertoView] onCallStateChange => ', state);
     if (state && state.current && (state.current.name === "hangup" || state.current.name === "destroy")) {
       setLocalStreamURL(null);
       setRemoteStreamURL(null);
@@ -105,17 +111,20 @@ const VertoView = (props: Props) => {
     // }
   }
 
-  const onNewCall = (call: Call) => {
-    // console.log('[vertoView] onNewCall:', call);
-    setCall(call);
+  // const onNewCall = (call: Call) => {
+  //   // console.log('[vertoView] onNewCall:', call);
+  //   setCall(call);
     
-    // if(props.callbacks.onNewCall) {
-    //   props.callbacks.onNewCall(call);
-    // }
-  }
+  //   // if(props.callbacks.onNewCall) {
+  //   //   props.callbacks.onNewCall(call);
+  //   // }
+  // }
 
-  const onPlayLocalVideo = (stream: MediaStream) => {
-    // console.log('[vertoView] onPlayLocalVideo stream.toURL:', stream);
+  const onPlayLocalVideo = (viewKey: string, stream: MediaStream) => {
+    if(viewKey !== props.viewKey) {
+      return;
+    }
+    printLog(props.showLogs, '[vertoView] onPlayLocalVideo stream.toURL:', stream);
     setLocalStream(stream);
     setLocalStreamURL(stream.toURL());
 
@@ -134,8 +143,11 @@ const VertoView = (props: Props) => {
     // }
   }
 
-  const onPlayRemoteVideo = (stream: MediaStream) => {
-    // console.log('[vertoView] onPlayRemoteVideo stream.toURL:', stream.toURL());
+  const onPlayRemoteVideo = (viewKey: string, stream: MediaStream) => {
+    if(viewKey !== props.viewKey) {
+      return;
+    }
+    printLog(props.showLogs, '[vertoView] onPlayRemoteVideo stream.toURL:', stream.toURL());
     setRemoteStreamURL(stream.toURL());
 
     // if(props.callbacks.onPlayRemoteVideo) {
@@ -148,7 +160,7 @@ const VertoView = (props: Props) => {
   //#region State Methods
 
   const handleCallState = () => {
-    // console.log('handleCallState callState:', props.callState);
+    printLog(props.showLogs, 'handleCallState callState:', props.callState);
     switch(props.callState) {
       case 'call':
         makeCall(props.callParams);
@@ -160,12 +172,12 @@ const VertoView = (props: Props) => {
   }
 
   const handleAudioState = () => {
-    // console.log('handleAudioState props.isAudioOff:', props.isAudioOff);
+    printLog(props.showLogs, 'handleAudioState props.isAudioOff:', props.isAudioOff);
     muteAudio(props.isAudioOff);
   }
 
   const handleVideoState = () => {
-    // console.log('handleVideoState props.isCameraOff:', props.isCameraOff);
+    printLog(props.showLogs, 'handleVideoState props.isCameraOff:', props.isCameraOff);
     muteVideo(props.isCameraOff);
   }
 
@@ -186,13 +198,14 @@ const VertoView = (props: Props) => {
   const makeCall = (callParams: MakeCallParams) => {
     // TODO Check is there any active call
     const call = getVertoClient().makeVideoCall(callParams);
-    setCall(call);
+    props.call = call;
+    // setCall(call);
   }
 
   const hangUpCall = () => {
-    if(call && call.params && call.params.callID) {
+    if(props.call && props.call.getId()) {
       // vertoClient.hangup(call.params.callID);
-      getVertoClient().hangup(call.params.callID);
+      getVertoClient().hangup(props.call.getId());
     }
   }
 
@@ -227,7 +240,7 @@ const VertoView = (props: Props) => {
   const switchCamera = () => {
     const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
-      getVertoClient().switchCamera(call.params.callID, localVideoTrack);
+      getVertoClient().switchCamera(props.call.getId(), localVideoTrack);
       // vertoClient.switchCamera(call.params.callID, localVideoTrack);
     }
   }
@@ -244,12 +257,13 @@ const VertoView = (props: Props) => {
 
     // const call = vertoClient.makeVideoCall(callParams);
     const call = getVertoClient().makeVideoCall(callParams);
-    setCall(call);
+    props.call = call;
+    // setCall(call);
   }
 
   const hangUpHandler = () => {
     // vertoClient.hangup(call.params.callID);
-    getVertoClient().hangup(call.params.callID);
+    getVertoClient().hangup(props.call.getId());
   }
 
   const logoutHandler = () => {
@@ -259,7 +273,7 @@ const VertoView = (props: Props) => {
   const cameraSwitchHandler = () => {
     const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
-      getVertoClient().switchCamera(call.params.callID, localVideoTrack);
+      getVertoClient().switchCamera(props.call.getId(), localVideoTrack);
       // vertoClient.switchCamera(call.params.callID, localVideoTrack);
     }
   }
