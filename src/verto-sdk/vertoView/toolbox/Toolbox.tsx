@@ -100,24 +100,23 @@ const Toolbox = (props: Props) => {
 
     return (
         toolboxVisible &&
-        <Animated.View {...props} style={{ ...styles(opacity).container, ...props.style as {} }}>
-            <Button style={styles(opacity).button} onPress={audioSwitchHandler} fileIndex={props.audioFileIndex}></Button>
+        <Animated.View {...props} style={[{ ...styles.container, ...props.style as {}, opacity: opacity }]}>
+            <Button style={styles.button} onPress={audioSwitchHandler} fileIndex={props.audioFileIndex}></Button>
             <Button backgroundColor={'red'} width={56} height={56} iconWidth={28} iconHeight={28} onPress={hangupHandler} fileIndex={ToolboxImage.Hangup}></Button>
-            <Button style={styles(opacity).button} onPress={cameraSwitchHandler} fileIndex={props.videoFileIndex}></Button>
+            <Button style={styles.button} onPress={cameraSwitchHandler} fileIndex={props.videoFileIndex}></Button>
         </Animated.View>
 
     )
 }
 
-const styles = (opacity) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         maxHeight: 64,
-        backgroundColor: 'transparent',
-        opacity: opacity
+        backgroundColor: 'transparent'
     },
     button: {
         backgroundColor: 'white',
