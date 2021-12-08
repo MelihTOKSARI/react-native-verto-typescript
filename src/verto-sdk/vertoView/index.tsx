@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Button } from 'react-native';
 import { MediaStream, MediaStreamTrack } from 'react-native-webrtc';
 import VertinhoClient from '../verto/VertoClient';
 import styles from './styles';
@@ -10,6 +10,7 @@ import MakeCallParams from '../models/Call/MakeCallParams';
 import { ToolboxImage } from '../enums/ToolboxImage.enum';
 import VertoInstanceManager from './VertoInstanceManager';
 import { printLog } from './utils';
+import CallScreen from './toolbox/CallScreen';
 
 interface Props {
   call?: Call,
@@ -18,6 +19,7 @@ interface Props {
   cameraFacing?: string,
   indicatorColor?: string,
   isAudioOff: boolean,
+  isCallScreenVisible?: boolean,
   isCameraOff: boolean,
   isToolboxVisible?: boolean,
   onAudioStateChanged?: Function,
@@ -218,8 +220,8 @@ const VertoView = (props: Props) => {
 
   //#region UI Listener Methods
 
-  const callHandler = () => {
-    const callee = text || '1001';
+  const callHandler = (callee: string) => {
+    callee = callee || 'CH1SN0S1';
     const callParams = {
       to: callee,
       from: '1000',
@@ -235,7 +237,7 @@ const VertoView = (props: Props) => {
     getVertoClient().hangup(call.getId());
   }
 
-  const logoutHandler = () => {
+  const handleLogout = () => {
     props.onLogoutClicked();
   }
 
@@ -274,10 +276,18 @@ const VertoView = (props: Props) => {
     <View style={styles.container}>
       {
         !isStreamStarted 
-          ? (<ActivityIndicator 
-            color={props.indicatorColor ? props.indicatorColor : 'black'} 
-            style={{flex: 1, alignSelf: 'center', justifyContent: 'center'}} 
-          />)
+          ? !props.isCallScreenVisible 
+            ? (<ActivityIndicator 
+              color={props.indicatorColor ? props.indicatorColor : 'black'} 
+              style={{flex: 1, alignSelf: 'center', justifyContent: 'center'}} 
+            />)
+            :
+            (
+              <View style={{ flex: 1 }}>
+                <CallScreen callHandler={callHandler} />
+                <Button title="Logout" onPress={handleLogout} />
+              </View>
+            )
           : 
           (
             <View style={{flex: 1}}>
