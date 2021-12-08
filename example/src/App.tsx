@@ -165,6 +165,7 @@ const App = () => {
           isAudioOff={audioState}
           isCameraOff={cameraState}
           isCallScreenVisible={true}
+          isRemoteAudioOff={false}
           isToolboxVisible={true}
           onLogoutClicked={onLogoutClicked}
           showLogs={true}
