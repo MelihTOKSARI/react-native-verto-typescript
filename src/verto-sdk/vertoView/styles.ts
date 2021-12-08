@@ -25,22 +25,15 @@ const styles = StyleSheet.create({
     zIndex: 10,
     elevation: 10
   },
-  // localStream: {
-  //   flex: 1,
-  //   height: '100%',
-  //   width: '100%',
-  // },
+  localStreamContainerUp: {
+    bottom: 60
+  },
   remoteStreamContainer: {
     flex: 1,
     height: '100%',
     width: '100%',
     resizeMode: 'cover'
   },
-  // remoteStream: {
-  //   flex: 1,
-  //   height: '100%',
-  //   width: '100%',
-  // },
   input: {
     height: 40,
     margin: 12,
