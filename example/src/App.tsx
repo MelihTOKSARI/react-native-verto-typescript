@@ -164,11 +164,11 @@ const App = () => {
           callParams={callParams} 
           isAudioOff={audioState}
           isCameraOff={cameraState}
-          isToolboxVisible={false}
+          isToolboxVisible={true}
           onLogoutClicked={onLogoutClicked}
           showLogs={true}
           viewKey="view1"
-          viewType={ViewType.remote} 
+          viewType={ViewType.both} 
         />
       }
       {
