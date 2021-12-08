@@ -41,8 +41,6 @@ const VertoView = (props: Props) => {
 
   const [isStreamStarted, setStreamStarted] = useState(false);
 
-  const [text, onChangeText] = useState('1001');
-
   const [audioFileIndex, setAudioFileIndex] = useState(ToolboxImage.Audio);
   const [videoFileIndex, setVideoFileIndex] = useState(ToolboxImage.Video);
 
@@ -68,7 +66,9 @@ const VertoView = (props: Props) => {
 
   useEffect(() => {
     printLog(props.showLogs, '[vertoView] useEffect props.call:', props.call);
-    setCall(props.call);
+    if(props.call) {
+      setCall(props.call);
+    }
   }, [props.call])
 
   const getVertoClient = () => {
@@ -172,14 +172,17 @@ const VertoView = (props: Props) => {
 
   const makeCall = (callParams: MakeCallParams) => {
     // TODO Check is there any active call
-    const call = getVertoClient().makeVideoCall(callParams);
-    printLog(props.showLogs, '[vertoView] call:', call);
-    setCall(call);
+    const newCall = getVertoClient().makeVideoCall(callParams);
+    printLog(props.showLogs, '[vertoView] call:', newCall);
+    setCall(newCall);
   }
 
   const hangUpCall = () => {
     if(call && call.getId()) {
+      printLog(props.showLogs, '[vertoView] hangupCall call:', call);
       getVertoClient().hangup(call.getId());
+    } else {
+      printLog(props.showLogs, '[vertoView] hangupCall else block');
     }
   }
 
@@ -228,9 +231,9 @@ const VertoView = (props: Props) => {
       callerName: 'Hi',
     };
 
-    const call = getVertoClient().makeVideoCall(callParams);
-    printLog(props.showLogs, '[vertoView] callHandler call:', call);
-    setCall(call);
+    const newCall = getVertoClient().makeVideoCall(callParams);
+    printLog(props.showLogs, '[vertoView] callHandler call:', newCall);
+    setCall(newCall);
   }
 
   const hangUpHandler = () => {
