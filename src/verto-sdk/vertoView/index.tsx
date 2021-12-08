@@ -21,9 +21,11 @@ interface Props {
   isAudioOff: boolean,
   isCallScreenVisible?: boolean,
   isCameraOff: boolean,
+  isRemoteAudioOff: boolean,
   isToolboxVisible?: boolean,
   onAudioStateChanged?: Function,
   onLogoutClicked: Function,
+  onRemoteAudioStateChanged?: Function,
   onVideoStateChanged?: Function,
   showLogs?: boolean,
   viewKey: string,
@@ -34,9 +36,12 @@ const VertoView = (props: Props) => {
 
   let vertoClient: VertinhoClient;
 
-  const [localStreamURL, setLocalStreamURL] = useState('');
-  const [localStream, setLocalStream] = useState(null);
   const [call, setCall] = useState(null);
+
+  const [localStream, setLocalStream] = useState(null);
+  const [localStreamURL, setLocalStreamURL] = useState('');
+  
+  const [remoteStream, setRemoteStream] = useState(null);
   const [remoteStreamURL, setRemoteStreamURL] = useState('');
 
   const [isStreamStarted, setStreamStarted] = useState(false);
@@ -61,8 +66,16 @@ const VertoView = (props: Props) => {
   }, [props.isAudioOff]);
 
   useEffect(() => {
+    handleRemoteAudioState();
+  }, [props.isRemoteAudioOff]);
+
+  useEffect(() => {
     handleVideoState();
   }, [props.isCameraOff]);
+
+  useEffect(() => {
+    switchCamera();
+  }, [props.cameraFacing])
 
   useEffect(() => {
     printLog(props.showLogs, '[vertoView] useEffect props.call:', props.call);
@@ -99,6 +112,7 @@ const VertoView = (props: Props) => {
     if(state && state.current && (state.current.name === "active")) {
       setStreamStarted(true);
       muteAudio(props.isAudioOff);
+      muteRemoteAudio(props.isRemoteAudioOff);
       muteVideo(props.isCameraOff);
     }
   }
@@ -127,6 +141,7 @@ const VertoView = (props: Props) => {
       return;
     }
     printLog(props.showLogs, '[vertoView] onPlayRemoteVideo stream.toURL:', stream.toURL());
+    setRemoteStream(stream);
     setRemoteStreamURL(stream.toURL());
   }
 
@@ -149,6 +164,11 @@ const VertoView = (props: Props) => {
   const handleAudioState = () => {
     printLog(props.showLogs, 'handleAudioState props.isAudioOff:', props.isAudioOff);
     muteAudio(props.isAudioOff);
+  }
+
+  const handleRemoteAudioState = () => {
+    printLog(props.showLogs, 'handleAudioState props.isAudioOff:', props.isAudioOff);
+    muteRemoteAudio(props.isAudioOff);
   }
 
   const handleVideoState = () => {
@@ -187,11 +207,29 @@ const VertoView = (props: Props) => {
   }
 
   const muteAudio = (mute: boolean) => {
+    if(!localStream) {
+      return;
+    }
+
     const localAudioTrack = getAudioTrack(localStream);
     if(localAudioTrack) {
       localAudioTrack.enabled = !mute;
       if(props.onAudioStateChanged) {
         props.onAudioStateChanged({ mute });
+      }
+    }
+  }
+
+  const muteRemoteAudio = (mute: boolean) => {
+    if(!remoteStream) {
+      return;
+    }
+
+    const remoteAudioTrack = getAudioTrack(remoteStream);
+    if(remoteAudioTrack) {
+      remoteAudioTrack.enabled = !mute;
+      if(props.onRemoteAudioStateChanged) {
+        props.onRemoteAudioStateChanged({ mute });
       }
     }
   }
@@ -215,6 +253,10 @@ const VertoView = (props: Props) => {
   }
 
   const switchCamera = () => {
+    if(!localStream || !localStream._tracks) {
+      return;
+    }
+
     const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
       getVertoClient().switchCamera(call.getId(), localVideoTrack);
@@ -237,7 +279,10 @@ const VertoView = (props: Props) => {
   }
 
   const hangUpHandler = () => {
-    getVertoClient().hangup(call.getId());
+    printLog(props.showLogs, '[vertoView] hangUpHandler call:', call);
+    if(call && call.getId()) {
+      getVertoClient().hangup(call.getId());
+    }
   }
 
   const handleLogout = () => {
