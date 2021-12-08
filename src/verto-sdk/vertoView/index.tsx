@@ -17,8 +17,8 @@ interface Props {
   callState?: string,
   cameraFacing?: string,
   indicatorColor?: string,
-  isCameraOff: boolean,
   isAudioOff: boolean,
+  isCameraOff: boolean,
   isToolboxVisible?: boolean,
   onAudioStateChanged?: Function,
   onLogoutClicked: Function,
@@ -34,7 +34,7 @@ const VertoView = (props: Props) => {
 
   const [localStreamURL, setLocalStreamURL] = useState('');
   const [localStream, setLocalStream] = useState(null);
-  // const [call, setCall] = useState(null);
+  const [call, setCall] = useState(null);
   const [remoteStreamURL, setRemoteStreamURL] = useState('');
 
   const [isStreamStarted, setStreamStarted] = useState(false);
@@ -63,6 +63,11 @@ const VertoView = (props: Props) => {
   useEffect(() => {
     handleVideoState();
   }, [props.isCameraOff]);
+
+  useEffect(() => {
+    printLog(props.showLogs, '[vertoView] useEffect props.call:', props.call);
+    setCall(props.call);
+  }, [props.call])
 
   const getVertoClient = () => {
     if(!vertoClient) {
@@ -166,12 +171,13 @@ const VertoView = (props: Props) => {
   const makeCall = (callParams: MakeCallParams) => {
     // TODO Check is there any active call
     const call = getVertoClient().makeVideoCall(callParams);
-    props.call = call;
+    printLog(props.showLogs, '[vertoView] call:', call);
+    setCall(call);
   }
 
   const hangUpCall = () => {
-    if(props.call && props.call.getId()) {
-      getVertoClient().hangup(props.call.getId());
+    if(call && call.getId()) {
+      getVertoClient().hangup(call.getId());
     }
   }
 
@@ -206,7 +212,7 @@ const VertoView = (props: Props) => {
   const switchCamera = () => {
     const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
-      getVertoClient().switchCamera(props.call.getId(), localVideoTrack);
+      getVertoClient().switchCamera(call.getId(), localVideoTrack);
     }
   }
 
@@ -221,11 +227,12 @@ const VertoView = (props: Props) => {
     };
 
     const call = getVertoClient().makeVideoCall(callParams);
-    props.call = call;
+    printLog(props.showLogs, '[vertoView] callHandler call:', call);
+    setCall(call);
   }
 
   const hangUpHandler = () => {
-    getVertoClient().hangup(props.call.getId());
+    getVertoClient().hangup(call.getId());
   }
 
   const logoutHandler = () => {
@@ -235,7 +242,7 @@ const VertoView = (props: Props) => {
   const cameraSwitchHandler = () => {
     const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
-      getVertoClient().switchCamera(props.call.getId(), localVideoTrack);
+      getVertoClient().switchCamera(call.getId(), localVideoTrack);
     }
   }
 
@@ -323,7 +330,7 @@ const VertoView = (props: Props) => {
                     videoSwitchHandler={videoSwitchHandler}
                   />
                   <ViewContainer 
-                    containerStyle={styles.localStreamContainer} 
+                    containerStyle={props.isToolboxVisible ? [styles.localStreamContainer, styles.localStreamContainerUp] : styles.localStreamContainer} 
                     objectFit={'contain'} 
                     streamURL={localStreamURL} 
                     viewStyle={styles.stream} 
