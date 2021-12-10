@@ -53,6 +53,7 @@ const VertoView = (props: Props) => {
     setDefaultStates();
 
     return () => {
+      VertoInstanceManager.removeInstanceCallbacks(props.viewKey);
       vertoClient = undefined;
     }
   }, []);
