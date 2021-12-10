@@ -589,11 +589,9 @@ export default class VertinhoClient {
   }
 
   public destroy(): void {
-    BackgroundTimer.stop();
     if (this.socketReady()) {
       this.webSocket.close();
       this.purge();
-
     } else {
       console.log('Tried to close a not ready socket while destroying.');
     }
@@ -603,6 +601,7 @@ export default class VertinhoClient {
 
     this.webSocket = null;
 
+    BackgroundTimer.stop();
     if (this.retryingTimer)
       clearTimeout(this.retryingTimer);
   }
