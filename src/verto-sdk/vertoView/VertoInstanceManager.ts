@@ -52,10 +52,7 @@ class VertoInstance {
 
     public removeInstanceCallbacks(key: string) {
         if(this.instanceCallbackListeners[key]) {
-            const index = this.instanceCallbackListeners.indexOf(key);
-            if (index >= -1) {
-                this.instanceCallbackListeners.splice(index, 1);
-            }
+            delete this.instanceCallbackListeners[key];
         }
     }
 
