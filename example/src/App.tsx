@@ -13,6 +13,8 @@ const App = () => {
 
   const [vertoClient, setVertoClient] = useState(null);
 
+  const [mediaActionsVisible, setMediaActionsVisible] = useState(false);
+
   const [loggedIn, setLoggedIn] = useState(false);
   const [vertoParams, setVertoParams] = useState({
     webSocket: {
@@ -69,9 +71,9 @@ const App = () => {
     },
     onNewCall: (call: Call) => {
       console.log('[example] onNewCall=>', call);
-      setTimeout(() => {
-        call.answer()
-      }, 2000);
+      // setTimeout(() => {
+      //   call.answer()
+      // }, 2000);
     }
   };
 
@@ -174,6 +176,7 @@ const App = () => {
         />
       }
       {
+        mediaActionsVisible &&
         <View style={{maxHeight: 60, flex: 1, flexDirection: 'row'}}>
           <Button title={'Audio'} onPress={() => setAudioState(!audioState)} />
           <Button title={'Video'} onPress={() => setCameraState(!cameraState)} />
