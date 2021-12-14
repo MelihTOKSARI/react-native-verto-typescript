@@ -24,10 +24,11 @@ class VertoInstance {
                 onPlayLocalVideo: this.onPlayLocalVideo,
                 onPlayRemoteVideo: this.onPlayRemoteVideo
             });
-            this.instanceCallbacks = callbacks;
         } else {
             printLog(showLogs, '[vertoInstance] vertoClient is already instantiated');
         }
+
+        this.instanceCallbacks = callbacks;
 
         this.showLogs = showLogs;
 
@@ -63,11 +64,6 @@ class VertoInstance {
         }
 
         if(this.instanceCallbackListeners) {
-            // Object.values(this.instanceCallbackListeners).forEach(callbacks => {
-            //     if(callbacks['onCallStateChange']) {
-            //         callbacks['onCallStateChange'](state);
-            //     }
-            // })
             Object.keys(this.instanceCallbackListeners).forEach(key => {
                 if(this.instanceCallbackListeners[key]['onCallStateChange']) {
                     this.instanceCallbackListeners[key]['onCallStateChange'](key, state);
@@ -83,22 +79,12 @@ class VertoInstance {
         if(this.instanceCallbacks && this.instanceCallbacks.onNewCall) {
             this.instanceCallbacks.onNewCall(call);
         }
-        // for(const callbackListeners in this.instanceCallbackListeners) {
-        //     if(callbackListeners['onNewCall']) {
-        //         callbackListeners['onNewCall'](call);
-        //     }
-        // }
         if(this.instanceCallbackListeners) {
             Object.keys(this.instanceCallbackListeners).forEach(key => {
                 if(this.instanceCallbackListeners[key]['onNewCall']) {
                     this.instanceCallbackListeners[key]['onNewCall'](key, call);
                 }
             })
-            // Object.values(this.instanceCallbackListeners).forEach(callbacks => {
-            //     if(callbacks['onNewCall']) {
-            //         callbacks['onNewCall'](call);
-            //     }
-            // })
         } else {
             printLog(this.showLogs, 'No listener for onNewCall');
         }
@@ -110,11 +96,6 @@ class VertoInstance {
             this.instanceCallbacks.onPlayLocalVideo(stream);
         }
         if(this.instanceCallbackListeners) {
-            // Object.values(this.instanceCallbackListeners).forEach(callbacks => {
-            //     if(callbacks['onPlayLocalVideo']) {
-            //         callbacks['onPlayLocalVideo'](stream);
-            //     }
-            // })
             Object.keys(this.instanceCallbackListeners).forEach(key => {
                 if(this.instanceCallbackListeners[key]['onPlayLocalVideo']) {
                     this.instanceCallbackListeners[key]['onPlayLocalVideo'](key, stream);
@@ -128,14 +109,9 @@ class VertoInstance {
     private onPlayRemoteVideo = (stream: MediaStream) => {
         printLog(this.showLogs, '[vertoInstance] onPlayRemoteVideo stream.toURL:', stream.toURL());
         if(this.instanceCallbacks && this.instanceCallbacks.onPlayRemoteVideo) {
-            this.instanceCallbacks.onPrivateEvent(stream);
+            this.instanceCallbacks.onPlayRemoteVideo(stream);
         }
         if(this.instanceCallbackListeners) {
-            // Object.values(this.instanceCallbackListeners).forEach(callbacks => {
-            //     if(callbacks['onPlayRemoteVideo']) {
-            //         callbacks['onPlayRemoteVideo'](stream);
-            //     }
-            // })
             Object.keys(this.instanceCallbackListeners).forEach(key => {
                 if(this.instanceCallbackListeners[key]['onPlayRemoteVideo']) {
                     this.instanceCallbackListeners[key]['onPlayRemoteVideo'](key, stream);
