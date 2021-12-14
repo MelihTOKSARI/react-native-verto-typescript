@@ -5,7 +5,7 @@ interface Props {
   callHandler?: (callee: string) => void,
 }
 
-const CallScreen = (props: Props) => {
+const DialScreen = (props: Props) => {
   
   const [callNumber, setCallNumber] = useState(''); 
 
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   }
 })
   
-  export default CallScreen;
+  export default DialScreen;
