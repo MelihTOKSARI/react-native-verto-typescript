@@ -24,10 +24,12 @@ interface Props {
   isCameraOff: boolean,
   isRemoteAudioOff: boolean,
   isToolboxVisible?: boolean,
+  localStreamURL?: string,
   onAudioStateChanged?: Function,
   onLogoutClicked: Function,
   onRemoteAudioStateChanged?: Function,
   onVideoStateChanged?: Function,
+  remoteStreamURL?: string,
   showLogs?: boolean,
   viewKey: string,
   viewType: ViewType
@@ -55,17 +57,31 @@ const VertoView = (props: Props) => {
   const activeCall = useRef<Call>(null);
 
   useEffect(() => {
+    console.log('[vertoView] useEffect mount props.viewKey:', props.viewKey, ' - call is null?', (props.call == null));
     setDefaultStates();
 
     return () => {
+      printLog(props.showLogs, '[vertoView] useEffect unmount props.viewKey:', props.viewKey);
       VertoInstanceManager.removeInstanceCallbacks(props.viewKey);
       vertoClient = undefined;
     }
   }, []);
 
+  // useEffect(() => {
+  //   handleCallState();
+  // }, [props.callState])
+
   useEffect(() => {
-    handleCallState();
-  }, [props.callState])
+    if(props.localStreamURL) {
+      setLocalStreamURL(props.localStreamURL);
+    }
+  }, [props.localStreamURL]);
+
+  useEffect(() => {
+    if(props.remoteStreamURL) {
+      setRemoteStreamURL(props.remoteStreamURL);
+    }
+  }, [props.remoteStreamURL])
 
   useEffect(() => {
     handleAudioState();
@@ -91,14 +107,20 @@ const VertoView = (props: Props) => {
     }
   }, [props.call])
 
+  const initializeVertoClient = () => {
+    printLog(props.showLogs, '[vertoView] initializeVertoClient props.viewKey:', props.viewKey);
+    vertoClient = VertoInstanceManager.getInstance(props.viewKey, {
+      onCallStateChange,
+      onNewCall,
+      onPlayLocalVideo,
+      onPlayRemoteVideo
+    });
+  }
+
   const getVertoClient = () => {
+    printLog(props.showLogs, '[vertoView] getVertoClient props.viewKey:', props.viewKey);
     if(!vertoClient) {
-      vertoClient = VertoInstanceManager.getInstance(props.viewKey, {
-        onCallStateChange,
-        onNewCall,
-        onPlayLocalVideo,
-        onPlayRemoteVideo
-      });
+      initializeVertoClient();
     }
 
     return vertoClient;
@@ -107,15 +129,17 @@ const VertoView = (props: Props) => {
   //#region Call Listener Methods
 
   const onCallStateChange = (viewKey: string, state: any) => {
-    if(!activeCall.current || !activeCall.current.getId()) {
-      printLog(props.showLogs, '[vertoView] onCallStateChange return! call is null?', (activeCall.current == null));
-      return;
-    }
+    // TODO Reactivate below code snippets to check this view has active call to proceed
+    // if(!activeCall.current || !activeCall.current.getId()) {
+    //   printLog(props.showLogs, '[vertoView] onCallStateChange return! call is null?', (activeCall.current == null));
+    //   return;
+    // }
 
     if(viewKey !== props.viewKey) {
       return;
     }
-    printLog(props.showLogs, '[vertoView] onCallStateChange => ', state);
+
+    printLog(props.showLogs, '[vertoView] onCallStateChange viewKey:', props.viewKey, ' - state:', state);
     if (state && state.current && (state.current.name === "hangup" || state.current.name === "destroy")) {
       setLocalStreamURL(null);
       setRemoteStreamURL(null);
@@ -147,15 +171,16 @@ const VertoView = (props: Props) => {
   }
 
   const onPlayLocalVideo = (viewKey: string, stream: MediaStream) => {
-    if(!activeCall.current || !activeCall.current.getId()) {
-      printLog(props.showLogs, '[vertoView] onPlayLocalVideo return! call is null?', (activeCall.current == null));
-      return;
-    }
+    // TODO Reactivate below code snippets to check this view has active call to proceed
+    // if(!activeCall.current || !activeCall.current.getId()) {
+    //   printLog(props.showLogs, '[vertoView] onPlayLocalVideo return! call is null?', (activeCall.current == null));
+    //   return;
+    // }
 
     if(viewKey !== props.viewKey) {
       return;
     }
-    printLog(props.showLogs, '[vertoView] onPlayLocalVideo stream.toURL:', stream);
+    printLog(props.showLogs, '[vertoView] onPlayLocalVideo viewKey:', props.viewKey, ' - stream.toURL:', stream);
     setLocalStream(stream);
     setLocalStreamURL(stream.toURL());
 
@@ -171,15 +196,16 @@ const VertoView = (props: Props) => {
   }
 
   const onPlayRemoteVideo = (viewKey: string, stream: MediaStream) => {
-    if(!activeCall.current || !activeCall.current.getId()) {
-      printLog(props.showLogs, '[vertoView] onPlayRemoteVideo return! call is null?', (activeCall.current == null));
-      return;
-    }
+    // TODO Reactivate below code snippets to check this view has active call to proceed
+    // if(!activeCall.current || !activeCall.current.getId()) {
+    //   printLog(props.showLogs, '[vertoView] onPlayRemoteVideo return! call is null?', (activeCall.current == null));
+    //   return;
+    // }
 
     if(viewKey !== props.viewKey) {
       return;
     }
-    printLog(props.showLogs, '[vertoView] onPlayRemoteVideo stream.toURL:', stream.toURL());
+    printLog(props.showLogs, '[vertoView] onPlayRemoteVideo viewKey:', props.viewKey, ' - stream.toURL:', stream.toURL());
     setRemoteStream(stream);
     setRemoteStreamURL(stream.toURL());
   }
@@ -188,17 +214,17 @@ const VertoView = (props: Props) => {
 
   //#region State Methods
 
-  const handleCallState = () => {
-    printLog(props.showLogs, '[vertoView] handleCallState callState:', props.callState);
-    switch(props.callState) {
-      case 'call':
-        makeCall(props.callParams);
-        break;
-      case 'hangup':
-        hangUpCall();
-        break;
-    }
-  }
+  // const handleCallState = () => {
+  //   printLog(props.showLogs, '[vertoView] handleCallState callState:', props.callState);
+  //   switch(props.callState) {
+  //     case 'call':
+  //       makeCall(props.callParams);
+  //       break;
+  //     case 'hangup':
+  //       hangUpCall();
+  //       break;
+  //   }
+  // }
 
   const handleAudioState = () => {
     printLog(props.showLogs, '[vertoView] handleAudioState props.isAudioOff:', props.isAudioOff);
@@ -216,6 +242,8 @@ const VertoView = (props: Props) => {
   }
 
   const setDefaultStates = () => {
+    initializeVertoClient();
+
     setIncomingCall(null);
     setHasIncomingCall(false);
     if(!props.isToolboxVisible) {
@@ -231,24 +259,24 @@ const VertoView = (props: Props) => {
     }
   }
 
-  const makeCall = (callParams: MakeCallParams) => {
-    // TODO Check is there any active call
-    const newCall = getVertoClient().makeVideoCall(callParams);
-    printLog(props.showLogs, '[vertoView] newCall is null?', (newCall == null));
-    activeCall.current = newCall;
-    printLog(props.showLogs, '[vertoView] activeCall is null?', (activeCall.current == null));
-    setCall(newCall);
-  }
+  // const makeCall = (callParams: MakeCallParams) => {
+  //   // TODO Check is there any active call
+  //   const newCall = getVertoClient().makeVideoCall(callParams);
+  //   printLog(props.showLogs, '[vertoView] newCall is null?', (newCall == null));
+  //   activeCall.current = newCall;
+  //   printLog(props.showLogs, '[vertoView] activeCall is null?', (activeCall.current == null));
+  //   setCall(newCall);
+  // }
 
-  const hangUpCall = () => {
-    if(call && call.getId()) {
-      printLog(props.showLogs, '[vertoView] hangupCall call is null?', (call == null));
-      getVertoClient().hangup(call.getId());
-      activeCall.current = null;
-    } else {
-      printLog(props.showLogs, '[vertoView] hangupCall else block');
-    }
-  }
+  // const hangUpCall = () => {
+  //   if(call && call.getId()) {
+  //     printLog(props.showLogs, '[vertoView] hangupCall call is null?', (call == null));
+  //     getVertoClient().hangup(call.getId());
+  //     activeCall.current = null;
+  //   } else {
+  //     printLog(props.showLogs, '[vertoView] hangupCall else block');
+  //   }
+  // }
 
   const acceptIncomingCall = () => {
     setHasIncomingCall(false);
