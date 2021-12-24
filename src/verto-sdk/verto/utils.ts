@@ -1,5 +1,3 @@
-import uuid from 'uuid';
-
 const integerToFourAlphanumerics = integer => {
   const digits = integer.toString(16);
   if (digits.length === 1) {
@@ -17,8 +15,15 @@ const integerToFourAlphanumerics = integer => {
   return digits;
 };
 
+const uuidv4 = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+  });
+}
+
 export const generateGUID = () => {
-  return uuid.v1();
+  return uuidv4();
 };
 
 export const ENUM = {
