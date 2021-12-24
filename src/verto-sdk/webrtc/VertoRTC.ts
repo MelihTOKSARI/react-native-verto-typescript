@@ -254,11 +254,11 @@ export default class VertoRTC {
       });
   }
 
-  public switchCamera(localVideoTrack: MediaStreamTrack): void {
-    if (localVideoTrack) {
-      localVideoTrack._switchCamera();
-    }
-  }
+  // public switchCamera(localVideoTrack: MediaStreamTrack): void {
+  //   if (localVideoTrack) {
+  //     localVideoTrack._switchCamera();
+  //   }
+  // }
 
   private getPeerConstraints(): RTCOfferOptions {
     return {
