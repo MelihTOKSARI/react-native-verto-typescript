@@ -342,11 +342,11 @@ const VertoView = (props: Props) => {
   }
 
   const switchCamera = () => {
-    if(!localStream || !localStream._tracks) {
+    if(!localStream || !localStream.getVideoTracks()) {
       return;
     }
 
-    const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
+    const localVideoTrack = localStream.getVideoTracks().find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
       getVertoClient().switchCamera(call.getId(), localVideoTrack);
     }
@@ -387,14 +387,14 @@ const VertoView = (props: Props) => {
   }
 
   const cameraSwitchHandler = () => {
-    const localVideoTrack = localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
+    const localVideoTrack = localStream.getVideoTracks().find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
       getVertoClient().switchCamera(call.getId(), localVideoTrack);
     }
   }
 
   const audioSwitchHandler = () => {
-    const localAudioTrack = localStream && localStream._tracks && localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'audio');
+    const localAudioTrack = localStream && localStream.getAudioTracks() && localStream.getAudioTracks().find((t: MediaStreamTrack) => t.kind == 'audio');
     localAudioTrack.enabled = !localAudioTrack.enabled;
 
     if(localAudioTrack.enabled) {
@@ -405,7 +405,7 @@ const VertoView = (props: Props) => {
   }
 
   const videoSwitchHandler = () => {
-    const localVideoTrack = localStream && localStream._tracks && localStream._tracks.find((t: MediaStreamTrack) => t.kind == 'video');
+    const localVideoTrack = localStream && localStream.getVideoTracks() && localStream.getVideoTracks().find((t: MediaStreamTrack) => t.kind == 'video');
     localVideoTrack.enabled = !localVideoTrack.enabled;
 
     if(localVideoTrack.enabled) {
