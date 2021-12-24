@@ -274,7 +274,7 @@ PODS:
     - glog
   - react-native-background-timer (2.4.1):
     - React-Core
-  - react-native-verto-typescript (0.2.2):
+  - react-native-verto-typescript (0.2.17):
     - React-Core
   - react-native-webrtc (1.92.2):
     - React-Core
@@ -527,7 +527,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d9c8eb0b53f0da206fed56612b289fec84991157
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
-  react-native-verto-typescript: 2af909861739f8929536050a9e54a684bf8e6f19
+  react-native-verto-typescript: 7a7c170145c6c329bb26e78710a5cdbf8b27dbdd
   react-native-webrtc: 41526e4060dac373c18676f866962d4180ee47b9
   React-perflogger: 73732888d37d4f5065198727b167846743232882
   React-RCTActionSheet: 96c6d774fa89b1f7c59fc460adc3245ba2d7fd79

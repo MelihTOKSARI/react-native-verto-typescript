@@ -1959,23 +1959,22 @@
   "resolved" "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz"
   "version" "15.7.4"
 
-"@types/react-native@0.62.13":
+"@types/react-native-webrtc@^1.75.5":
+  "integrity" "sha512-UuZvF+7Y4aD9TrlN1u9IM3GuwQa8Qp0OSABiF2lVNTjil7DqcdwVnKZ6cIV9w/2rO+Z1II9b0vHtkhNpxFFp8w=="
+  "resolved" "https://registry.npmjs.org/@types/react-native-webrtc/-/react-native-webrtc-1.75.5.tgz"
+  "version" "1.75.5"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native@*", "@types/react-native@0.62.13":
   "integrity" "sha512-hs4/tSABhcJx+J8pZhVoXHrOQD89WFmbs8QiDLNSA9zNrD46pityAuBWuwk1aMjPk9I3vC5ewkJroVRHgRIfdg=="
   "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.62.13.tgz"
   "version" "0.62.13"
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  "integrity" "sha512-CUFUp01OdfbpN/76v4koqgcpcRGT3sYOq3U3N6q0ZVGcyeP40NUdVU+EWe3hs34RNaTefiYyBzOpxBBidCc5zw=="
-  "resolved" "https://registry.npmjs.org/@types/react/-/react-17.0.36.tgz"
-  "version" "17.0.36"
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    "csstype" "^3.0.2"
-
-"@types/react@^16.9.19":
+"@types/react@*", "@types/react@^16.9.19":
   "integrity" "sha512-rY4DzPKK/4aohyWiDRHS2fotN5rhBSK6/rz1X37KzNna9HJyqtaGAbq9fVttrEPWF5ywpfIP1ITL8Xi2QZn6Eg=="
   "resolved" "https://registry.npmjs.org/@types/react/-/react-16.14.21.tgz"
   "version" "16.14.21"
@@ -9055,7 +9054,7 @@
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   "version" "3.4.0"
 
-"uuid@^8.3.0", "uuid@>=8.3.0", "uuid@8.3.2":
+"uuid@^8.3.0", "uuid@8.3.2":
   "integrity" "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"

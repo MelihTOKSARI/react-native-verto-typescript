@@ -47,6 +47,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = VertoTypescriptExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = VertoTypescriptExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VertoTypescriptExample/main.m; sourceTree = "<group>"; };
+		216164D3277334C400A9973B /* JitsiMeetSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = JitsiMeetSDK.xcframework; path = Frameworks/JitsiMeetSDK.xcframework; sourceTree = "<group>"; };
+		216164D4277334C400A9973B /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = Frameworks/WebRTC.xcframework; sourceTree = "<group>"; };
 		216C87BC275A531E006D80ED /* JitsiMeetSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JitsiMeetSDK.framework; path = ../../../JitsiMeetSDK.framework; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* VertoTypescriptExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VertoTypescriptExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* VertoTypescriptExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "VertoTypescriptExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +127,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				216164D3277334C400A9973B /* JitsiMeetSDK.xcframework */,
+				216164D4277334C400A9973B /* WebRTC.xcframework */,
 				216C87BC275A531E006D80ED /* JitsiMeetSDK.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -596,6 +600,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C65UA55AW7;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = VertoTypescriptExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
