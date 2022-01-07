@@ -24,6 +24,7 @@ class VertoInstance {
             this.vertoClient = new VertinhoClient(params, {
                 ...callbacks,
                 onCallStateChange: this.onCallStateChange,
+                onClientClose: this.onClientClose,
                 onNewCall: this.onNewCall,
                 onPlayLocalVideo: this.onPlayLocalVideo,
                 onPlayRemoteVideo: this.onPlayRemoteVideo
@@ -40,7 +41,9 @@ class VertoInstance {
     }
 
     public destroy() {
+        printLog(this.showLogs, '[vertoInstance - destroy] requested...');
         if(this.vertoClient) {
+            printLog(this.showLogs, '[vertoInstance - destroy] try to destroy socket...');
             this.vertoClient.destroy();
             this.vertoClient = undefined;
         }
@@ -85,6 +88,10 @@ class VertoInstance {
         } else {
           printLog(this.showLogs, '[vertoInstance] hangupCall else block');
         }
+    }
+
+    private onClientClose = () => {
+        printLog(this.showLogs, '[vertoInstance - onClientClose] socket is closed');
     }
 
     private onCallStateChange = (state: any) => {

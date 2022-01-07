@@ -84,19 +84,19 @@ const App = () => {
 
       setVertoAuthParams(loginParams);
       
-      if(loginParams.password) {
+      if(vertoClient === null && loginParams.password) {
         setLoggedIn(true);
-
-        const tmpVertoClient = VertoInstanceManager.createInstance(
-          {
-            ...vertoParams,
-            webSocket: loginParams
-          }, 
-          callbacks,
-          true
-        )
+        createVertoInstance();
+        // const tmpVertoClient = VertoInstanceManager.createInstance(
+        //   {
+        //     ...vertoParams,
+        //     webSocket: loginParams
+        //   }, 
+        //   callbacks,
+        //   true
+        // )
     
-        setVertoClient(tmpVertoClient);
+        // setVertoClient(tmpVertoClient);
       }
     }
   }
@@ -110,6 +110,16 @@ const App = () => {
     setVertoParams(newVertoParams);
   }
 
+  const createVertoInstance = () => {
+    const tmpVertoClient = VertoInstanceManager.createInstance(
+      vertoParams,
+      callbacks,
+      true
+    )
+
+    setVertoClient(tmpVertoClient);
+  }
+
   const onLoginHandler = (login: string, password: string, url: string) => {
     if(!login ||!password) {
       // TODO Show login warning
@@ -118,17 +128,17 @@ const App = () => {
 
     const authParams = { login, password, url };
     setVertoAuthParams(authParams);
-    
-    const tmpVertoClient = VertoInstanceManager.createInstance(
-      {
-        ...vertoParams,
-        webSocket: authParams
-      }, 
-      callbacks,
-      true
-    )
+    createVertoInstance();
+    // const tmpVertoClient = VertoInstanceManager.createInstance(
+    //   {
+    //     ...vertoParams,
+    //     webSocket: authParams
+    //   }, 
+    //   callbacks,
+    //   true
+    // )
 
-    setVertoClient(tmpVertoClient);
+    // setVertoClient(tmpVertoClient);
 
     // setLoggedIn(true);
 
@@ -152,6 +162,15 @@ const App = () => {
     setLoggedIn(false);
   }
 
+  const onChangeSocketState = () => {
+    if(vertoClient) {
+      VertoInstanceManager.destroy();
+      setVertoClient(null);
+    } else {
+      createVertoInstance();
+    }
+  }
+
   return (
     <View
       style={{
@@ -159,6 +178,11 @@ const App = () => {
       }}>
       {
         !loggedIn && <LoginScreen authParams={vertoParams.webSocket} onLoginHandler={onLoginHandler} />
+      }
+      {
+        <View style={{maxHeight: 40, marginTop: 20, flex: 1}}>
+          <Button title={vertoClient !== null ? 'Close Socket' : 'Connect'} onPress={onChangeSocketState} />
+        </View>
       }
       {
         loggedIn && <VertoView 
