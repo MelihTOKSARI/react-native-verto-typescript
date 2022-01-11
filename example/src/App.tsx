@@ -5,8 +5,6 @@ import {
   View,
 } from 'react-native';
 
-// import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoParams, VertoView, ViewType } from 'react-native-verto-typescript';
-
 import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoInstanceManager, VertoParams, VertoView, ViewType } from 'react-native-verto-typescript';
 
 const App = () => {
@@ -41,10 +39,18 @@ const App = () => {
   const [callState, setCallState] = useState('');
   const [audioState, setAudioState] = useState(true);
   const [cameraState, setCameraState] = useState(true);
+  const [cameraFacing, setCameraFacing] = useState('front');
   
   useEffect(() => {
     checkLoginParams();
   }, [])
+
+  useEffect(() => {
+    console.log('[App - useEffect[vertoParams]] vertoParams has changed!');
+    if(vertoParams.webSocket && vertoParams.webSocket.url) {
+      createVertoInstance();
+    }
+  }, [vertoParams])
 
   const callbacks = {
     onPrivateEvent: (vertoClient: VertoClient, dataParams: VertoParams, userData: ConferenceLiveArray) => {
@@ -86,27 +92,16 @@ const App = () => {
       
       if(vertoClient === null && loginParams.password) {
         setLoggedIn(true);
-        createVertoInstance();
-        // const tmpVertoClient = VertoInstanceManager.createInstance(
-        //   {
-        //     ...vertoParams,
-        //     webSocket: loginParams
-        //   }, 
-        //   callbacks,
-        //   true
-        // )
-    
-        // setVertoClient(tmpVertoClient);
       }
     }
   }
 
   const setVertoAuthParams = (authParams: any) => {
     const newVertoParams = {
-      ...vertoParams,
-      webSocket: authParams
+      ...vertoParams
     }
-
+    newVertoParams.webSocket = authParams;
+    
     setVertoParams(newVertoParams);
   }
 
@@ -116,7 +111,6 @@ const App = () => {
       callbacks,
       true
     )
-
     setVertoClient(tmpVertoClient);
   }
 
@@ -128,19 +122,6 @@ const App = () => {
 
     const authParams = { login, password, url };
     setVertoAuthParams(authParams);
-    createVertoInstance();
-    // const tmpVertoClient = VertoInstanceManager.createInstance(
-    //   {
-    //     ...vertoParams,
-    //     webSocket: authParams
-    //   }, 
-    //   callbacks,
-    //   true
-    // )
-
-    // setVertoClient(tmpVertoClient);
-
-    // setLoggedIn(true);
 
     AsyncStorage.setItem(
       'login', 
@@ -171,6 +152,13 @@ const App = () => {
     }
   }
 
+  const onCameraSwitchHandler = () => {
+    console.log('[App - onCameraSwitchHandler] cameraFacing:', cameraFacing);
+    setCameraFacing((prevState: string): string => {
+      return prevState === 'front' ? 'rear' : 'front';
+    })
+  }
+
   return (
     <View
       style={{
@@ -180,14 +168,19 @@ const App = () => {
         !loggedIn && <LoginScreen authParams={vertoParams.webSocket} onLoginHandler={onLoginHandler} />
       }
       {
-        <View style={{maxHeight: 40, marginTop: 20, flex: 1}}>
+        <View style={{maxHeight: 40, marginTop: 20, flex: 1, flexDirection: 'row'}}>
           <Button title={vertoClient !== null ? 'Close Socket' : 'Connect'} onPress={onChangeSocketState} />
+          {
+            vertoClient && 
+            <Button title={'Switch Camera'} onPress={onCameraSwitchHandler} />
+          }
         </View>
       }
       {
         loggedIn && <VertoView 
           callState={callState}
           callParams={callParams} 
+          cameraFacing={cameraFacing}
           isAudioOff={audioState}
           isCameraOff={cameraState}
           isCallScreenVisible={true}

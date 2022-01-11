@@ -348,7 +348,8 @@ const VertoView = (props: Props) => {
 
     const localVideoTrack = localStream.getVideoTracks().find((t: MediaStreamTrack) => t.kind == 'video');
     if (localVideoTrack) {
-      getVertoClient().switchCamera(call.getId(), localVideoTrack);
+      printLog(props.showLogs, '[vertoView - switchCamera] Prepare to switch camera');
+      localVideoTrack._switchCamera();
     }
   }
 
