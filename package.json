@@ -1,6 +1,6 @@
 {
   "name": "react-native-verto-typescript",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "React native package for verto with typescript support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
