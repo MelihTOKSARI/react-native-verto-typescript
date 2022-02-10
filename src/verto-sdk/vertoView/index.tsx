@@ -19,17 +19,18 @@ interface Props {
   callState?: string,
   cameraFacing?: string,
   indicatorColor?: string,
+  indicatorVisible?: boolean,
   isAudioOff: boolean,
   isCallScreenVisible?: boolean,
   isCameraOff: boolean,
   isRemoteAudioOff: boolean,
   isToolboxVisible?: boolean,
-  localStreamURL?: string,
+  localStream?: MediaStream,
   onAudioStateChanged?: Function,
   onLogoutClicked: Function,
   onRemoteAudioStateChanged?: Function,
   onVideoStateChanged?: Function,
-  remoteStreamURL?: string,
+  remoteStream?: MediaStream,
   showLogs?: boolean,
   viewKey: string,
   viewType: ViewType
@@ -72,16 +73,20 @@ const VertoView = (props: Props) => {
   // }, [props.callState])
 
   useEffect(() => {
-    if(props.localStreamURL) {
-      setLocalStreamURL(props.localStreamURL);
+    if(props.localStream) {
+      setLocalStream(props.localStream);
+      setLocalStreamURL(props.localStream.toURL());
+      updateStreamDependencies();
     }
-  }, [props.localStreamURL]);
+  }, [props.localStream]);
 
   useEffect(() => {
-    if(props.remoteStreamURL) {
-      setRemoteStreamURL(props.remoteStreamURL);
+    if(props.remoteStream) {
+      setRemoteStream(props.remoteStream);
+      setRemoteStreamURL(props.remoteStream.toURL());
+      updateStreamDependencies();
     }
-  }, [props.remoteStreamURL])
+  }, [props.remoteStream])
 
   useEffect(() => {
     handleAudioState();
@@ -141,16 +146,11 @@ const VertoView = (props: Props) => {
 
     printLog(props.showLogs, '[vertoView] onCallStateChange viewKey:', props.viewKey, ' - state:', state);
     if (state && state.current && (state.current.name === "hangup" || state.current.name === "destroy")) {
-      setLocalStreamURL(null);
-      setRemoteStreamURL(null);
-      setStreamStarted(false);
+      clearStreamProperties();
     }
 
     if(state && state.current && (state.current.name === "active")) {
-      setStreamStarted(true);
-      muteAudio(props.isAudioOff);
-      muteRemoteAudio(props.isRemoteAudioOff);
-      muteVideo(props.isCameraOff);
+      updateStreamDependencies();
     }
   }
 
@@ -226,6 +226,17 @@ const VertoView = (props: Props) => {
   //   }
   // }
 
+  /**
+   * Reset stream properties to default values
+   */
+  const clearStreamProperties = () => {
+    setStreamStarted(false);
+    setLocalStream(null);
+    setLocalStreamURL(null);
+    setRemoteStream(null);
+    setRemoteStreamURL(null);
+  }
+
   const handleAudioState = () => {
     printLog(props.showLogs, '[vertoView] handleAudioState props.isAudioOff:', props.isAudioOff);
     muteAudio(props.isAudioOff);
@@ -257,6 +268,16 @@ const VertoView = (props: Props) => {
     if(!props.isCameraOff) {
       props.isCameraOff = true;
     }
+  }
+
+  /**
+   * Update status of stream dependencies after stream is started
+   */
+   const updateStreamDependencies = () => {
+    setStreamStarted(true);
+    muteAudio(props.isAudioOff);
+    muteRemoteAudio(props.isRemoteAudioOff);
+    muteVideo(props.isCameraOff);
   }
 
   // const makeCall = (callParams: MakeCallParams) => {
@@ -422,8 +443,8 @@ const VertoView = (props: Props) => {
     <View style={styles.container}>
       {
         !isStreamStarted 
-          ? !props.isCallScreenVisible 
-            ? (<ActivityIndicator 
+          ? props.isCallScreenVisible === undefined || props.isCallScreenVisible === false
+            ? (props.indicatorVisible === undefined && props.indicatorVisible && <ActivityIndicator 
               color={props.indicatorColor ? props.indicatorColor : 'black'} 
               style={{flex: 1, alignSelf: 'center', justifyContent: 'center'}} 
             />)
