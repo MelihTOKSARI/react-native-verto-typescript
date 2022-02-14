@@ -27,6 +27,7 @@ interface Props {
   isToolboxVisible?: boolean,
   localStream?: MediaStream,
   onAudioStateChanged?: Function,
+  onCallHangup?: Function,
   onLogoutClicked: Function,
   onRemoteAudioStateChanged?: Function,
   onVideoStateChanged?: Function,
@@ -401,6 +402,9 @@ const VertoView = (props: Props) => {
     if(call && call.getId()) {
       getVertoClient().hangup(call.getId());
       activeCall.current = null;
+      if(props.onCallHangup) {
+        props.onCallHangup();
+      }
     }
   }
 
