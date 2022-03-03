@@ -39,7 +39,7 @@ interface Props {
 
 const VertoView = (props: Props) => {
 
-  let vertoClient: VertinhoClient;
+  const [vertoClient, setVertoClient] = useState<VertinhoClient>();
 
   const [call, setCall] = useState<Call>(null);
   const [incomingCall, setIncomingCall] = useState<Call>(null);
@@ -65,7 +65,7 @@ const VertoView = (props: Props) => {
     return () => {
       printLog(props.showLogs, '[vertoView] useEffect unmount props.viewKey:', props.viewKey);
       VertoInstanceManager.removeInstanceCallbacks(props.viewKey);
-      vertoClient = undefined;
+      setVertoClient(undefined);
     }
   }, []);
 
@@ -115,12 +115,12 @@ const VertoView = (props: Props) => {
 
   const initializeVertoClient = () => {
     printLog(props.showLogs, '[vertoView] initializeVertoClient props.viewKey:', props.viewKey);
-    vertoClient = VertoInstanceManager.getInstance(props.viewKey, {
+    setVertoClient(VertoInstanceManager.getInstance(props.viewKey, {
       onCallStateChange,
       onNewCall,
       onPlayLocalVideo,
       onPlayRemoteVideo
-    });
+    }));
   }
 
   const getVertoClient = () => {
@@ -134,7 +134,7 @@ const VertoView = (props: Props) => {
 
   //#region Call Listener Methods
 
-  const onCallStateChange = (viewKey: string, state: any) => {
+  const onCallStateChange = (viewKey: string, state: any, callId: string) => {
     // TODO Reactivate below code snippets to check this view has active call to proceed
     // if(!activeCall.current || !activeCall.current.getId()) {
     //   printLog(props.showLogs, '[vertoView] onCallStateChange return! call is null?', (activeCall.current == null));
@@ -172,12 +172,6 @@ const VertoView = (props: Props) => {
   }
 
   const onPlayLocalVideo = (viewKey: string, stream: MediaStream) => {
-    // TODO Reactivate below code snippets to check this view has active call to proceed
-    // if(!activeCall.current || !activeCall.current.getId()) {
-    //   printLog(props.showLogs, '[vertoView] onPlayLocalVideo return! call is null?', (activeCall.current == null));
-    //   return;
-    // }
-
     if(viewKey !== props.viewKey) {
       return;
     }
@@ -197,15 +191,10 @@ const VertoView = (props: Props) => {
   }
 
   const onPlayRemoteVideo = (viewKey: string, stream: MediaStream) => {
-    // TODO Reactivate below code snippets to check this view has active call to proceed
-    // if(!activeCall.current || !activeCall.current.getId()) {
-    //   printLog(props.showLogs, '[vertoView] onPlayRemoteVideo return! call is null?', (activeCall.current == null));
-    //   return;
-    // }
-
     if(viewKey !== props.viewKey) {
       return;
     }
+
     printLog(props.showLogs, '[vertoView] onPlayRemoteVideo viewKey:', props.viewKey, ' - stream.toURL:', stream.toURL());
     setRemoteStream(stream);
     setRemoteStreamURL(stream.toURL());
@@ -214,18 +203,6 @@ const VertoView = (props: Props) => {
   //#endregion
 
   //#region State Methods
-
-  // const handleCallState = () => {
-  //   printLog(props.showLogs, '[vertoView] handleCallState callState:', props.callState);
-  //   switch(props.callState) {
-  //     case 'call':
-  //       makeCall(props.callParams);
-  //       break;
-  //     case 'hangup':
-  //       hangUpCall();
-  //       break;
-  //   }
-  // }
 
   /**
    * Reset stream properties to default values
@@ -280,25 +257,6 @@ const VertoView = (props: Props) => {
     muteRemoteAudio(props.isRemoteAudioOff);
     muteVideo(props.isCameraOff);
   }
-
-  // const makeCall = (callParams: MakeCallParams) => {
-  //   // TODO Check is there any active call
-  //   const newCall = getVertoClient().makeVideoCall(callParams);
-  //   printLog(props.showLogs, '[vertoView] newCall is null?', (newCall == null));
-  //   activeCall.current = newCall;
-  //   printLog(props.showLogs, '[vertoView] activeCall is null?', (activeCall.current == null));
-  //   setCall(newCall);
-  // }
-
-  // const hangUpCall = () => {
-  //   if(call && call.getId()) {
-  //     printLog(props.showLogs, '[vertoView] hangupCall call is null?', (call == null));
-  //     getVertoClient().hangup(call.getId());
-  //     activeCall.current = null;
-  //   } else {
-  //     printLog(props.showLogs, '[vertoView] hangupCall else block');
-  //   }
-  // }
 
   const acceptIncomingCall = () => {
     setHasIncomingCall(false);
