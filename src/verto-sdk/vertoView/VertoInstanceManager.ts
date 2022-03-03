@@ -52,7 +52,6 @@ class VertoInstance {
     public getInstance(key?: string, callbackListeners?: any) {
         if(key && callbackListeners) {
             printLog(this.showLogs, '[vertoInstance] key:', key, ' - callbackListeners:', callbackListeners);
-            // this.instanceCallbackListeners[key] = callbackListeners;
             this.instanceCallbackListenerKey = key;
             this.instanceCallbackListener = callbackListeners;
         }
@@ -64,9 +63,6 @@ class VertoInstance {
         if (key === this.instanceCallbackListenerKey) {
             this.instanceCallbackListener = null;
         }
-        // if(this.instanceCallbackListeners[key]) {
-        //     delete this.instanceCallbackListeners[key];
-        // }
     }
 
     public makeCall(callParams: MakeCallParams): Call {
@@ -94,19 +90,14 @@ class VertoInstance {
         printLog(this.showLogs, '[vertoInstance - onClientClose] socket is closed');
     }
 
-    private onCallStateChange = (state: any) => {
+    private onCallStateChange = (state: any, callId: string) => {
         printLog(this.showLogs, '[vertoInstance] onCallStateChange => ', state, ' - instanceCallbackListeners:', this.instanceCallbackListeners);
         if(this.instanceCallbacks && this.instanceCallbacks.onCallStateChange) {
-            this.instanceCallbacks.onCallStateChange(state);
+            this.instanceCallbacks.onCallStateChange(state, callId);
         }
 
         if (this.instanceCallbackListener && this.instanceCallbackListener['onCallStateChange']) {
-            // Object.keys(this.instanceCallbackListeners).forEach(key => {
-            //     if(this.instanceCallbackListeners[key]['onCallStateChange']) {
-            //         this.instanceCallbackListeners[key]['onCallStateChange'](key, state);
-            //     }
-            // })
-            this.instanceCallbackListener['onCallStateChange'](this.instanceCallbackListenerKey, state);
+            this.instanceCallbackListener['onCallStateChange'](this.instanceCallbackListenerKey, state, callId);
         } else {
             printLog(this.showLogs, '[vertoInstance] No listener for onCallStateChange');
         }
@@ -118,11 +109,6 @@ class VertoInstance {
             this.instanceCallbacks.onNewCall(call);
         }
         if (this.instanceCallbackListener && this.instanceCallbackListener['oneNewCall']) {
-            // Object.keys(this.instanceCallbackListeners).forEach(key => {
-            //     if(this.instanceCallbackListeners[key]['onNewCall']) {
-            //         this.instanceCallbackListeners[key]['onNewCall'](key, call);
-            //     }
-            // })
             this.instanceCallbackListener['oneNewCall'](this.instanceCallbackListenerKey, call);
         } else {
             printLog(this.showLogs, '[vertoInstance] No listener for onNewCall');
@@ -135,11 +121,6 @@ class VertoInstance {
             this.instanceCallbacks.onPlayLocalVideo(stream);
         }
         if (this.instanceCallbackListener && this.instanceCallbackListener['onPlayLocalVideo']) {
-            // Object.keys(this.instanceCallbackListeners).forEach(key => {
-            //     if(this.instanceCallbackListeners[key]['onPlayLocalVideo']) {
-            //         this.instanceCallbackListeners[key]['onPlayLocalVideo'](key, stream);
-            //     }
-            // })
             this.instanceCallbackListener['onPlayLocalVideo'](this.instanceCallbackListenerKey, stream);
         } else {
             printLog(this.showLogs, '[vertoInstance] No listener for onPlayLocalVideo');
@@ -152,11 +133,6 @@ class VertoInstance {
             this.instanceCallbacks.onPlayRemoteVideo(stream);
         }
         if (this.instanceCallbackListener && this.instanceCallbackListener['onPlayRemoteVideo']) {
-            // Object.keys(this.instanceCallbackListeners).forEach(key => {
-            //     if(this.instanceCallbackListeners[key]['onPlayRemoteVideo']) {
-            //         this.instanceCallbackListeners[key]['onPlayRemoteVideo'](key, stream);
-            //     }
-            // })
             this.instanceCallbackListener['onPlayRemoteVideo'](this.instanceCallbackListenerKey, stream);
         } else {
             printLog(this.showLogs, '[vertoInstance] No listener for onPlayRemoteVideo');

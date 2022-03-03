@@ -35,7 +35,7 @@ export interface defaultVertoCallbacks {
   onConferenceReady?: (params: any) =>  void,
   onConferenceDisabled?: (params: any) =>  void,
   onDisplay?: (params: any) =>  void,
-  onCallStateChange?: (params: any) => void,
+  onCallStateChange?: (params: any, callId: string) => void,
   onStreamReady?: () =>  void,
   onError?: (params: any) => void
 }

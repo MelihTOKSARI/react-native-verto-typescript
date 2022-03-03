@@ -59,8 +59,8 @@ const App = () => {
     onEvent: (vertoClient: VertoClient, dataParams: VertoParams, userData: ConferenceLiveArray) => {
       console.log('[example] onEvent');
     },
-    onCallStateChange: (state: any) => {
-      console.log('[example] onCallStateChange state.current.name:', state.current.name);
+    onCallStateChange: (state: any, callId: string) => {
+      console.log('[example] onCallStateChange state.current.name:', state.current.name, ' - callId:', callId);
     },
     onInfo: (params: any) => {
       console.log('[example] onInfo');
