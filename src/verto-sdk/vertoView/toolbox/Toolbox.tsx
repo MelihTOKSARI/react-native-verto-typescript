@@ -25,7 +25,7 @@ const Toolbox = (props: Props) => {
     useEffect(() => {
         fadeIn();
 
-        return () => clearFadeOutTimeout(true);
+        // return () => clearFadeOutTimeout(true);
     }, [])
 
     useDidMountEffect(() => {
