@@ -77,10 +77,20 @@ class VertoInstance {
         return call;
     }
     
-    public hangUpCall(call: Call) {
+    /**
+     * Hangup a call with cause code
+     * 
+     * @param call Call to send hangup request
+     * @param causeCode Reason to end call. If not set, send 'NORMAL_CLEARING' as a default code
+     */
+    public hangUpCall(call: Call, causeCode?: number) {
+        if(!this.vertoClient) {
+            return;
+        }
+
         if(call && call.getId()) {
           printLog(this.showLogs, '[vertoInstance] hangupCall call is null?', (call == null));
-          this.vertoClient.hangup(call.getId());
+          this.vertoClient.hangup(call.getId(), causeCode);
         } else {
           printLog(this.showLogs, '[vertoInstance] hangupCall else block');
         }

@@ -609,12 +609,12 @@ export default class VertinhoClient {
       clearTimeout(this.retryingTimer);
   }
 
-  public hangup(callId: string): void {
+  public hangup(callId: string, causeCode?: number): void {
     if (callId) {
       const call = this.calls[callId];
 
       if (call) {
-        call.hangup();
+        call.hangup({ causeCode });
       } else {
         console.log('Error on hanging up call', callId);
       }

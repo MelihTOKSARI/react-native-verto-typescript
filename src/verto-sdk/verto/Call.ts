@@ -22,7 +22,7 @@ export default class Call {
   private lastState: CallStateItem;
   private state: CallStateItem;
 
-  // private causeCode;
+  private causeCode: number;
   private cause: string;
 
   private gotEarly: boolean;
@@ -166,7 +166,7 @@ export default class Call {
       //(reason: any) => PromiseLike<never>
       onPeerStreamingError: (reason: any) => Promise.reject((error: any) => {
         this.verto.options.onPeerStreamingError(error);
-        this.hangup({ cause: 'Device or Permission Error' });
+        this.hangup({ cause: 'Device or Permission Error', causeCode: 604 });
         return Promise.reject(error);
       }),
       onNewCall: (call: Call) => {
@@ -348,10 +348,15 @@ export default class Call {
   public hangup(params?) {
     if (params) {
       this.cause = params.cause;
+      this.causeCode = params.causeCode;
     }
 
     if (!this.cause) {
       this.cause = 'NORMAL_CLEARING';
+    }
+
+    if(!this.causeCode) {
+      this.causeCode = 16;
     }
 
     const isNotNew = this.state.val >= ENUM.state.new.val;
