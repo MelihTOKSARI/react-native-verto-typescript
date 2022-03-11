@@ -27,7 +27,7 @@ export default class VertoRTC {
   public mediaData: VertoRTCMediaData;
 
   private peer: FSRTCPeerConnection;
-  private localStream: any; // TODO give a type
+  private localStream: MediaStream;
 
   public type: string;
 
@@ -204,6 +204,10 @@ export default class VertoRTC {
       audio: this.getAudioConstraint(),
       video: this.getVideoConstraint(),
     };
+  }
+
+  public getLocalStream(): MediaStream {
+    return this.localStream;
   }
 
   public onICE(candidate: any): void {

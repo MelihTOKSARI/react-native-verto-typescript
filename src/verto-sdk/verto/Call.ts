@@ -488,6 +488,10 @@ export default class Call {
     return this.params.callID;
   }
 
+  getMediaHandlers() {
+    return this.mediaHandlers;
+  }
+
   getCallerIdentification({ useCaracterEntities }) {
     return [
       this.params.remote_caller_id_name,

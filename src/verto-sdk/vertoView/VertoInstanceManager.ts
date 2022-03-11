@@ -17,6 +17,8 @@ class VertoInstance {
 
     private showLogs: boolean;
 
+    private activeCalls: Array<Call> = [];
+
     public createInstance(params: VertoParams, callbacks: defaultVertoCallbacks, showLogs?: boolean): VertinhoClient {
         printLog(showLogs, '[vertoInstance] params:', params);
         if(!this.vertoClient) {
@@ -29,8 +31,11 @@ class VertoInstance {
                 onPlayLocalVideo: this.onPlayLocalVideo,
                 onPlayRemoteVideo: this.onPlayRemoteVideo
             });
+        } else if(!this.vertoClient.socketReady()) {
+            printLog(showLogs, '[vertoInstance] trying to reconnect vertoClient');
+            this.vertoClient.connect();
         } else {
-            printLog(showLogs, '[vertoInstance] vertoClient is already instantiated');
+            printLog(showLogs, '[vertoInstance] vertoClient is already instantiated and connected');
         }
 
         this.instanceCallbacks = callbacks;
@@ -38,6 +43,12 @@ class VertoInstance {
         this.showLogs = showLogs;
 
         return this.vertoClient;
+    }
+
+    public connect() {
+        if(this.vertoClient && !this.vertoClient.socketReady()) {
+            this.vertoClient.connect();
+        }
     }
 
     public destroy() {
@@ -65,16 +76,117 @@ class VertoInstance {
         }
     }
 
+    /**
+     * Make a call with given parameters. 
+     * 
+     * @param callParams Call parameters to create a call
+     * @returns Newly created call
+     */
     public makeCall(callParams: MakeCallParams): Call {
         if(!this.vertoClient) {
             printLog(this.showLogs, '[vertoInstance] vertoClient is not instantiated!!!');
             return;
         }
 
-        const call = this.vertoClient.makeVideoCall(callParams);
+        let call: Call;
+        if(callParams.useVideo) {
+            call = this.vertoClient.makeVideoCall(callParams);
+        } else {
+            call = this.vertoClient.makeCall(callParams);
+        }
+        
+        if(call) {
+            this.activeCalls.push(call);
+        }
+        
         printLog(this.showLogs, '[vertoInstance] this.call is null?', (call == null));
 
         return call;
+    }
+
+    /**
+     * Answer a call if call is exist
+     * 
+     * @param call Incoming call
+     */
+    public answerCall(call: Call) {
+        if(call) {
+            call.answer();
+            this.activeCalls.push(call);
+        }
+    }
+
+    /**
+     * Insert a new call into active calls
+     * 
+     * @param call Currenly active call for client
+     */
+    public insertCall(call: Call) {
+        const callIndex = this.activeCalls.findIndex(c => c.getId() === call.getId());
+
+        if(callIndex === -1) {
+            this.activeCalls.push(call);
+        }
+    }
+
+    /**
+     * Remove call from active calls
+     * 
+     * @param callId Id of call to remove from active calls
+     */
+    public removeCall(callId: string) {
+        const callIndex = this.activeCalls.findIndex(c => c.getId() === callId);
+        if(callIndex > -1) {
+            this.activeCalls.splice(callIndex, 1);
+        }
+    }
+
+    /**
+     * Start local stream of a call with given callId
+     * 
+     * @param callId Id of call to start local stream
+     */
+    public startLocalStream(callId: string) {
+        const call: Call = this.activeCalls.find(c => c.getId() === callId);
+        if(call) {
+            call.getMediaHandlers().playLocalVideo();
+        }
+    }
+
+    /**
+     * Stop local stream of a call with given callId
+     * 
+     * @param callId Id of call to stop local stream
+     */
+    public stopLocalStream(callId: string) {
+        const call: Call = this.activeCalls.find(c => c.getId() === callId);
+        if(call) {
+            call.getMediaHandlers().stopLocalVideo();
+        }
+    }
+
+    /**
+     * Mute/Unmute local audio of a call with given callId
+     * 
+     * @param callId Id of call to mute/unmute local audio
+     */
+    public muteLocalAudio(callId: string, mute: boolean) {
+        const call: Call = this.activeCalls.find(c => c.getId() === callId);
+        if(call) {
+            call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
+        }
+    }
+
+    /**
+     * Mute/Unmute local video of a call with given callId
+     * 
+     * @param callId Id of call to mute/unmute local video
+     */
+    public muteLocalVideo(callId: string, mute: boolean) {
+        const call: Call = this.activeCalls.find(c => c.getId() === callId);
+        if(call) {
+            call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
+        }
     }
     
     /**
@@ -90,6 +202,7 @@ class VertoInstance {
 
         if(call && call.getId()) {
           printLog(this.showLogs, '[vertoInstance] hangupCall call is null?', (call == null));
+          this.removeCall(call.getId());
           this.vertoClient.hangup(call.getId(), causeCode);
         } else {
           printLog(this.showLogs, '[vertoInstance] hangupCall else block');

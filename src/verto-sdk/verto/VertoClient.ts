@@ -74,7 +74,7 @@ export default class VertinhoClient {
     this.connect();
   }
 
-  private connect(): void {
+  public connect(): void {
     this.options = {
       webSocket: {
         login: '',
@@ -183,7 +183,7 @@ export default class VertinhoClient {
     }
   }
 
-  private socketReady(): boolean {
+  public socketReady(): boolean {
     if (this.webSocket === null || this.webSocket.readyState > 1) {
       return false;
     }
@@ -569,7 +569,7 @@ export default class VertinhoClient {
   }
 
   // private makeCall(callParams: any = { to, from, ...otherParams }, mediaHandlers = {}): Call {
-  private makeCall(callParams: any, mediaHandlers?: VertoRTCMediaHandlers): Call {
+  public makeCall(callParams: any, mediaHandlers?: VertoRTCMediaHandlers): Call {
     if (!callParams.to || !callParams.from) {
       console.log('No `to` or `from` parameters on making call.');
       return null;
