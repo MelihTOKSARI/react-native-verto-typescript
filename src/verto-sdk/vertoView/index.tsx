@@ -181,12 +181,12 @@ const VertoView = (props: Props) => {
 
     const audioTrack = getAudioTrack(stream);
     if(audioTrack) {
-      audioTrack.enabled = !props.isAudioOff;
+      muteAudio(props.isAudioOff);
     }
 
     const videoTrack = getVideoTrack(stream);
     if(videoTrack) {
-      videoTrack.enabled = !props.isCameraOff;
+      muteVideo(props.isCameraOff);
     }
   }
 
@@ -276,7 +276,7 @@ const VertoView = (props: Props) => {
   }
 
   const muteAudio = (mute: boolean) => {
-    if(!localStream) {
+    if(!localStream || mute == null) {
       return;
     }
 
@@ -290,7 +290,7 @@ const VertoView = (props: Props) => {
   }
 
   const muteRemoteAudio = (mute: boolean) => {
-    if(!remoteStream) {
+    if(!remoteStream || mute == null) {
       return;
     }
 
