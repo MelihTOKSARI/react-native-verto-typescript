@@ -36,6 +36,7 @@ class VertoInstance {
             this.vertoClient.connect();
         } else {
             printLog(showLogs, '[vertoInstance] vertoClient is already instantiated and connected');
+            callbacks.onClientReady({});
         }
 
         this.instanceCallbacks = callbacks;
