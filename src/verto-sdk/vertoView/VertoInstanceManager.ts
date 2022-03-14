@@ -149,8 +149,8 @@ class VertoInstance {
      */
     public startLocalStream(callId: string) {
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call) {
-            call.getMediaHandlers().playLocalVideo();
+        if(call && call.getMediaHandlers()) {
+            call.getMediaHandlers()?.playLocalVideo();
         }
     }
 
@@ -161,7 +161,7 @@ class VertoInstance {
      */
     public stopLocalStream(callId: string) {
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call) {
+        if(call && call.getMediaHandlers()) {
             call.getMediaHandlers().stopLocalVideo();
         }
     }
