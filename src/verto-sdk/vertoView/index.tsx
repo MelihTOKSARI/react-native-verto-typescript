@@ -312,6 +312,10 @@ const VertoView = (props: Props) => {
   }
 
   const muteVideo = (mute: boolean) => {
+    if(!localStream || mute == null) {
+      return;
+    }
+
     const localVideoTrack = getVideoTrack(localStream);
     if(localVideoTrack) {
       localVideoTrack.enabled = !mute;
