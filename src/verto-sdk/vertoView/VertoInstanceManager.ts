@@ -170,24 +170,36 @@ class VertoInstance {
      * Mute/Unmute local audio of a call with given callId
      * 
      * @param callId Id of call to mute/unmute local audio
+     * @param mute Auido is muted if mute value is true
+     * @param onMuteResult Result of the operation. True if call video track is found, otherwise false
      */
-    public muteLocalAudio(callId: string, mute: boolean) {
+    public muteLocalAudio(callId: string, mute: boolean, onMuteResult?: Function) {
+        let result = false;
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call) {
+        if(call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getAudioTracks()) {
             call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
+            result = true;
         }
+
+        onMuteResult(result);
     }
 
     /**
      * Mute/Unmute local video of a call with given callId
      * 
      * @param callId Id of call to mute/unmute local video
+     * @param mute Video is muted if mute value is true
+     * @param onMuteResult Result of the operation. True if call video track is found, otherwise false
      */
-    public muteLocalVideo(callId: string, mute: boolean) {
+    public muteLocalVideo(callId: string, mute: boolean, onMuteResult?: Function) {
+        let result = false;
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call) {
+        if(call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getVideoTracks()) {
             call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
+            result = true;
         }
+
+        onMuteResult(result);
     }
     
     /**
