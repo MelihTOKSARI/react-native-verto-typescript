@@ -56,6 +56,8 @@ const VertoView = (props: Props) => {
   const [audioFileIndex, setAudioFileIndex] = useState(ToolboxImage.Audio);
   const [videoFileIndex, setVideoFileIndex] = useState(ToolboxImage.Video);
 
+  const [viewType, setViewType] = useState(ViewType.remote);
+
   const activeCall = useRef<Call>(null);
 
   useEffect(() => {
@@ -112,6 +114,10 @@ const VertoView = (props: Props) => {
       setCall(props.call);
     }
   }, [props.call])
+
+  useEffect(() => {
+    setViewType(props.viewType);
+  }, [props.viewType])
 
   const initializeVertoClient = () => {
     printLog(props.showLogs, '[vertoView] initializeVertoClient props.viewKey:', props.viewKey);
@@ -382,7 +388,7 @@ const VertoView = (props: Props) => {
   }
 
   const audioSwitchHandler = () => {
-    const localAudioTrack = localStream && localStream.getAudioTracks() && localStream.getAudioTracks().find((t: MediaStreamTrack) => t.kind == 'audio');
+    const localAudioTrack = localStream && localStream.getAudioTracks() && localStream.getAudioTracks()[0];
     localAudioTrack.enabled = !localAudioTrack.enabled;
 
     if(localAudioTrack.enabled) {
@@ -393,13 +399,15 @@ const VertoView = (props: Props) => {
   }
 
   const videoSwitchHandler = () => {
-    const localVideoTrack = localStream && localStream.getVideoTracks() && localStream.getVideoTracks().find((t: MediaStreamTrack) => t.kind == 'video');
+    const localVideoTrack = localStream && localStream.getVideoTracks() && localStream.getVideoTracks()[0];
     localVideoTrack.enabled = !localVideoTrack.enabled;
 
     if(localVideoTrack.enabled) {
       setVideoFileIndex(ToolboxImage.Video);
+      setViewType(ViewType.both);
     } else {
       setVideoFileIndex(ToolboxImage.NoVideo);
+      setViewType(ViewType.remote);
     }
   }
 
@@ -437,7 +445,7 @@ const VertoView = (props: Props) => {
           (
             <View style={{flex: 1}}>
               {
-                props.viewType == ViewType.remote && 
+                viewType == ViewType.remote && 
                 <ViewContainer 
                   containerStyle={styles.streamContainer} 
                   objectFit={'cover'} 
@@ -453,7 +461,7 @@ const VertoView = (props: Props) => {
                 />
               }
               {
-                props.viewType == ViewType.local &&
+                viewType == ViewType.local &&
                 <ViewContainer 
                   containerStyle={styles.streamContainer} 
                   objectFit={'cover'} 
@@ -469,7 +477,7 @@ const VertoView = (props: Props) => {
                 />
               }
               {
-                props.viewType == ViewType.both && 
+                viewType == ViewType.both && 
                 <View style={{flex: 1}}>
                   <ViewContainer 
                     containerStyle={styles.remoteStreamContainer} 
