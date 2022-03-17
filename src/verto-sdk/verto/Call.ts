@@ -251,7 +251,8 @@ export default class Call {
 
     this.verto.callbacks.onCallStateChange({
       previous: this.lastState,
-      current: this.state
+      current: this.state,
+      causeCode: this.causeCode
     }, this.params.callID);
 
     const speaker = this.params.useSpeak;
