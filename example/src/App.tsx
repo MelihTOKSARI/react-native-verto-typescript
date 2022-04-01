@@ -34,7 +34,8 @@ const App = () => {
   const [callParams, setCallParams] = useState({
     to: 'CH1SN0S1',
     from: '1000',
-    callerName: 'Hi'
+    callerName: 'Hi',
+    useVideo: true
   })
   const [callState, setCallState] = useState('');
   const [audioState, setAudioState] = useState(true);
