@@ -28,7 +28,7 @@ interface Props {
   localStream?: MediaStream,
   onAudioStateChanged?: Function,
   onCallHangup?: Function,
-  onLogoutClicked: Function,
+  onLogoutClicked?: Function,
   onRemoteAudioStateChanged?: Function,
   onVideoStateChanged?: Function,
   remoteStream?: MediaStream,
@@ -377,7 +377,9 @@ const VertoView = (props: Props) => {
   }
 
   const handleLogout = () => {
-    props.onLogoutClicked();
+    if(props.onLogoutClicked) {
+      props.onLogoutClicked();
+    }
   }
 
   const cameraSwitchHandler = () => {
