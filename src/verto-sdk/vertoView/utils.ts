@@ -1,5 +1,5 @@
 const printLog = (showLogs: boolean, ...logs: Array<any>) => {
-    if(showLogs) {
+    if(__DEV__ && showLogs) {
         console.log(...logs);
     }
 }
