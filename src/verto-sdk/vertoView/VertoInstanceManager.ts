@@ -171,7 +171,7 @@ class VertoInstance {
      * 
      * @param callId Id of call to mute/unmute local audio
      * @param mute Auido is muted if mute value is true
-     * @param onMuteResult Result of the operation. True if call video track is found, otherwise false
+     * @param onMuteResult Result of the operation. True if call audio track is found, otherwise false
      */
     public muteLocalAudio(callId: string, mute: boolean, onMuteResult?: Function) {
         let result = false;
