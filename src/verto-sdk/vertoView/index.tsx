@@ -61,7 +61,7 @@ const VertoView = (props: Props) => {
   const activeCall = useRef<Call>(null);
 
   useEffect(() => {
-    console.log('[vertoView] useEffect mount props.viewKey:', props.viewKey, ' - call is null?', (props.call == null));
+    // console.log('[vertoView] useEffect mount props.viewKey:', props.viewKey, ' - call is null?', (props.call == null));
     setDefaultStates();
 
     return () => {
