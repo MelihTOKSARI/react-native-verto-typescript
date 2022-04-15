@@ -283,7 +283,7 @@ export default class Call {
 
       case ENUM.state.hangup:
         if (isAfterRequesting && isBeforeHangup) {
-          this.broadcastMethod(CallActions.Bye, {});
+          this.broadcastMethod(CallActions.Bye, { causeCode: this.causeCode });
         }
 
         this.setState(ENUM.state.destroy);
@@ -325,7 +325,7 @@ export default class Call {
         break;
 
       case CallActions.Bye:
-        this.hangup();
+        this.hangup({ causeCode: this.causeCode });
         break;
 
       case CallActions.Modify:
