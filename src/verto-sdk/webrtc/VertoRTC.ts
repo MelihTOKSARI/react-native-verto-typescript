@@ -28,7 +28,7 @@ export default class VertoRTC {
 
   private peer: FSRTCPeerConnection;
   private localStream: MediaStream;
-  private removedTracks: Array<MediaStreamTrack>
+  private removedTracks: Array<MediaStreamTrack> = []
 
   public type: string;
 
@@ -215,7 +215,7 @@ export default class VertoRTC {
     if(this.localStream == null) {
       return;
     }
-    
+
     this.removedTracks = [];
     this.localStream.getTracks().forEach((track: MediaStreamTrack) => {
       this.removedTracks.push(track);
