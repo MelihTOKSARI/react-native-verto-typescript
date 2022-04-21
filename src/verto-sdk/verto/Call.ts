@@ -493,14 +493,12 @@ export default class Call {
     return this.mediaHandlers;
   }
 
-  getCallerIdentification({ useCaracterEntities }) {
-    return [
-      this.params.remote_caller_id_name,
-      ' ',
-      useCaracterEntities ? '&lt;' : '<',
-      this.params.remote_caller_id_number,
-      useCaracterEntities ? '&gt;' : '>',
-    ].join('');
+  getCallerIdentification() {
+    return this.params.remote_caller_id_number;
+  }
+
+  getCalleeIdentification() {
+    return this.params.callee_id_number;
   }
 
   handleInfo(params) {
