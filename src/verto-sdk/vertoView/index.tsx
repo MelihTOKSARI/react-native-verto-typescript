@@ -431,7 +431,7 @@ const VertoView = (props: Props) => {
                   {
                     hasIncomingCall 
                       ? <NewCallScreen 
-                        callFrom={incomingCall.getCallerIdentification({ useCaracterEntities: false })} 
+                        callFrom={incomingCall.getCallerIdentification()} 
                         onAnswerAccepted={acceptIncomingCall} 
                         onAnswerRejected={rejectIncomingCall}
                       />
