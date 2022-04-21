@@ -182,9 +182,9 @@ class VertoInstance {
             // call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
             if(mute && call.rtc.getLocalStream().getAudioTracks()[0]) {
                 call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
-                this.stopLocalStream(call.getId());
+                this.stopLocalStream(call.getId(), 'audio');
             } else {
-                this.startLocalStream(call.getId());
+                this.startLocalStream(call.getId(), 'audio');
                 call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
             }
             result = true;
@@ -207,9 +207,9 @@ class VertoInstance {
             // call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
             if(mute && call.rtc.getLocalStream().getVideoTracks()[0]) {
                 call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
-                this.stopLocalStream(call.getId());
+                this.stopLocalStream(call.getId(), 'video');
             } else {
-                this.startLocalStream(call.getId());
+                this.startLocalStream(call.getId(), 'video');
                 call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
             }
             result = true;
