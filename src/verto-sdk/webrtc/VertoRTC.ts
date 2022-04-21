@@ -28,6 +28,7 @@ export default class VertoRTC {
 
   private peer: FSRTCPeerConnection;
   private localStream: MediaStream;
+  private removedTracks: Array<MediaStreamTrack>
 
   public type: string;
 
@@ -208,6 +209,31 @@ export default class VertoRTC {
 
   public getLocalStream(): MediaStream {
     return this.localStream;
+  }
+
+  public removeLocalStreamTracks() {
+    if(this.localStream == null) {
+      return;
+    }
+    
+    this.removedTracks = [];
+    this.localStream.getTracks().forEach((track: MediaStreamTrack) => {
+      this.removedTracks.push(track);
+      this.localStream.removeTrack(track)
+    })
+  }
+
+  public reAddLocalStreamTracks() {
+    if(this.localStream == null) {
+      return;
+    }
+
+    if(this.removedTracks) {
+      this.removedTracks.forEach((track: MediaStreamTrack) => {
+        this.localStream.addTrack(track);
+      })
+    }
+    this.removedTracks = [];
   }
 
   public onICE(candidate: any): void {
