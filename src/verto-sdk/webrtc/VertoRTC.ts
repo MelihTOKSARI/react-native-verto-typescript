@@ -223,6 +223,34 @@ export default class VertoRTC {
     })
   }
 
+  public removeLocalTracks(kind?: string) {
+    if(this.localStream == null || (kind !== 'audio' && kind !== 'video')) {
+      return;
+    }
+
+    this.removedTracks = kind ? this.removedTracks.filter(track => track.kind != kind) : []
+    this.localStream.getTracks().forEach((track: MediaStreamTrack) => {
+      if(!kind || track.kind === kind) {
+        this.removedTracks.push(track);
+        this.localStream.removeTrack(track)
+      }
+    })
+  }
+
+  public reAddLocalTracks(kind?: string) {
+    if(this.localStream == null || (kind !== 'audio' && kind !== 'video')) {
+      return;
+    }
+
+    this.removedTracks.forEach((track: MediaStreamTrack) => {
+      if(!kind || track.kind === kind) {
+        this.localStream.addTrack(track);
+      }
+    })
+
+    this.removedTracks = kind ? this.removedTracks.filter(track => track.kind != kind) : [];
+  }
+
   public reAddLocalStreamTracks() {
     if(this.localStream == null) {
       return;

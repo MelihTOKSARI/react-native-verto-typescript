@@ -147,10 +147,11 @@ class VertoInstance {
      * 
      * @param callId Id of call to start local stream
      */
-    public startLocalStream(callId: string) {
+    public startLocalStream(callId: string, kind?: string) {
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
         if(call && call.rtc) {
-            call.rtc.reAddLocalStreamTracks();
+            // call.rtc.reAddLocalStreamTracks();
+            call.rtc.reAddLocalTracks(kind);
         }
     }
 
@@ -159,10 +160,11 @@ class VertoInstance {
      * 
      * @param callId Id of call to stop local stream
      */
-    public stopLocalStream(callId: string) {
+    public stopLocalStream(callId: string, kind?: string) {
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
         if(call && call.rtc) {
-            call.rtc.removeLocalStreamTracks();
+            // call.rtc.removeLocalStreamTracks();
+            call.rtc.removeLocalTracks(kind);
         }
     }
 
@@ -177,7 +179,14 @@ class VertoInstance {
         let result = false;
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
         if(call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getAudioTracks()) {
-            call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
+            // call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
+            if(mute && call.rtc.getLocalStream().getAudioTracks()[0]) {
+                call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
+                this.stopLocalStream(call.getId());
+            } else {
+                this.startLocalStream(call.getId());
+                call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
+            }
             result = true;
         }
 
@@ -195,7 +204,14 @@ class VertoInstance {
         let result = false;
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
         if(call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getVideoTracks()) {
-            call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
+            // call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
+            if(mute && call.rtc.getLocalStream().getVideoTracks()[0]) {
+                call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
+                this.stopLocalStream(call.getId());
+            } else {
+                this.startLocalStream(call.getId());
+                call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
+            }
             result = true;
         }
 
