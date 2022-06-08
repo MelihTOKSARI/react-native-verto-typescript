@@ -6,7 +6,7 @@ import styles from './styles';
 import Call from '../verto/Call';
 import ViewType from '../enums/ViewType.enum';
 import ViewContainer from './ViewContainer';
-import MakeCallParams from '../models/Call/MakeCallParams';
+import CallInfoParams from '../models/Call/CallInfoParams';
 import { ToolboxImage } from '../enums/ToolboxImage.enum';
 import VertoInstanceManager from './VertoInstanceManager';
 import { printLog } from './utils';
@@ -15,7 +15,7 @@ import NewCallScreen from './toolbox/NewCallScreen';
 
 interface Props {
   call?: Call,
-  callParams?: MakeCallParams,
+  callParams?: CallInfoParams,
   callState?: string,
   cameraFacing?: string,
   indicatorColor?: string,
@@ -27,8 +27,11 @@ interface Props {
   isToolboxVisible?: boolean,
   localStream?: MediaStream,
   onAudioStateChanged?: Function,
-  onCallHangup?: Function,
+  onCallHangup?: (call?: Call) => void,
+  onCallRequested?: (call: Call) => void,
   onLogoutClicked?: Function,
+  onMicrophoneMuted?: (muted: boolean) => void,
+  onVideoMuted?: (muted: boolean) => void,
   onRemoteAudioStateChanged?: Function,
   onVideoStateChanged?: Function,
   remoteStream?: MediaStream,
@@ -351,27 +354,33 @@ const VertoView = (props: Props) => {
       return;
     }
 
-    callee = callee || 'CH1SN0S1';
+    callee = callee || props.callParams.to || 'CH1SN0S1';
     const callParams = {
-      to: callee,
-      from: '1000',
-      callerName: 'Hi',
+      // to: callee,
+      // from: '1000',
+      // callerName: 'Hi',
+      // useVideo: true
+      ...props.callParams,
+      to: callee
     };
-
-    const newCall = getVertoClient().makeVideoCall(callParams);
+    
+    const newCall = VertoInstanceManager.makeCall(callParams);
     printLog(props.showLogs, '[vertoView] callHandler newCall is null?', (newCall == null));
     activeCall.current = newCall;
     printLog(props.showLogs, '[vertoView] callHandler activeCall is null?', (activeCall.current == null));
     setCall(newCall);
+    if(props.onCallRequested) {
+      props.onCallRequested(newCall);
+    }
   }
 
   const hangUpHandler = () => {
     printLog(props.showLogs, '[vertoView] hangUpHandler call is null?', (call == null));
     if(call && call.getId()) {
-      getVertoClient().hangup(call.getId());
+      VertoInstanceManager.hangUpCall(call);
       activeCall.current = null;
       if(props.onCallHangup) {
-        props.onCallHangup();
+        props.onCallHangup(call);
       }
     }
   }
@@ -398,6 +407,10 @@ const VertoView = (props: Props) => {
     } else {
       setAudioFileIndex(ToolboxImage.NoAudio);
     }
+
+    if(props.onMicrophoneMuted) {
+      props.onMicrophoneMuted(localAudioTrack.muted);
+    }
   }
 
   const videoSwitchHandler = () => {
@@ -410,6 +423,10 @@ const VertoView = (props: Props) => {
     } else {
       setVideoFileIndex(ToolboxImage.NoVideo);
       setViewType(ViewType.remote);
+    }
+
+    if(props.onVideoMuted) {
+      props.onVideoMuted(localVideoTrack.muted);
     }
   }
 

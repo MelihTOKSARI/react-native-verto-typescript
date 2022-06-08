@@ -574,7 +574,7 @@ export default class VertinhoClient {
       console.log('No `to` or `from` parameters on making call.');
       return null;
     }
-
+    
     const { callerName = 'Vertinho', ...params } = callParams;
     params.destination_number = callParams.to;
     params.caller_id_number = callParams.from;
@@ -584,7 +584,7 @@ export default class VertinhoClient {
       console.log('Socket not ready.');
       return null;
     }
-
+    
     const call = new Call(ENUM.direction.outbound, this, params, mediaHandlers);
     call.rtc.inviteRemotePeerConnection();
 

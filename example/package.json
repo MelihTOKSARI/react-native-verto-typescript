@@ -13,7 +13,10 @@
     "react": "17.0.2",
     "react-native": "0.66.3",
     "react-native-background-timer": "^2.4.1",
-    "react-native-webrtc": "^1.92.2"
+    "react-native-callkeep": "^4.3.3",
+    "react-native-uuid": "^2.0.1",
+    "react-native-webrtc": "^1.92.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

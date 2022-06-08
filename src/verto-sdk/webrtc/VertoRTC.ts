@@ -207,6 +207,10 @@ export default class VertoRTC {
     };
   }
 
+  public getHasVideo(): boolean {
+    return this.options.useVideo;
+  }
+
   public getLocalStream(): MediaStream {
     return this.localStream;
   }

@@ -7528,6 +7528,11 @@
   optionalDependencies:
     "jetifier" "^1.6.6"
 
+"react-native-callkeep@^4.3.3":
+  "integrity" "sha512-XfzVBB577qQpjhkdrqLgyyvRFqdvjzR+yamtl7hf0aSSiuIdMNTNJFj5wBoXp0Tffm11Jwl0myKXfxrRy+c45w=="
+  "resolved" "https://registry.npmjs.org/react-native-callkeep/-/react-native-callkeep-4.3.3.tgz"
+  "version" "4.3.3"
+
 "react-native-codegen@^0.0.7":
   "integrity" "sha512-dwNgR8zJ3ALr480QnAmpTiqvFo+rDtq6V5oCggKhYFlRjzOmVSFn3YD41u8ltvKS5G2nQ8gCs2vReFFnRGLYng=="
   "resolved" "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.7.tgz"
@@ -7536,6 +7541,11 @@
     "flow-parser" "^0.121.0"
     "jscodeshift" "^0.11.0"
     "nullthrows" "^1.1.1"
+
+"react-native-uuid@^2.0.1":
+  "integrity" "sha512-cptnoIbL53GTCrWlb/+jrDC6tvb7ypIyzbXNJcpR3Vab0mkeaaVd5qnB3f0whXYzS+SMoSQLcUUB0gEWqkPC0g=="
+  "resolved" "https://registry.npmjs.org/react-native-uuid/-/react-native-uuid-2.0.1.tgz"
+  "version" "2.0.1"
 
 "react-native-webrtc@>=1.87.3":
   "integrity" "sha512-eq8otVRvLBD/kSM53SPymyrI7sq06/qejwhiLQKVlUsxaXTKPf3C5lktXsnw5OGZUmVk7y5rH+8ZJ3k+422t6g=="
@@ -7548,7 +7558,7 @@
     "prop-types" "^15.5.10"
     "uuid" "^3.3.2"
 
-"react-native@*", "react-native@>=0.47.0", "react-native@>=0.60.0", "react-native@0.66.3":
+"react-native@*", "react-native@>=0.40.0", "react-native@>=0.47.0", "react-native@>=0.60.0", "react-native@0.66.3":
   "integrity" "sha512-B/dQpuvta9YvF5MihDWefoGlTvxzUHK5X5RjdrXHAu/ihTehJXxEA+m6z/tufp1ZUMDjU+tMZK6gnehzCuYfzw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.66.3.tgz"
   "version" "0.66.3"

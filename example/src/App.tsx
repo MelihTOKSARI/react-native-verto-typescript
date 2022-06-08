@@ -34,8 +34,8 @@ const App = () => {
   const [callParams, setCallParams] = useState({
     to: 'CH1SN0S1',
     from: '1000',
-    callerName: 'Hi',
-    useVideo: true
+    callerName: '1000',
+    useVideo: false
   })
   const [callState, setCallState] = useState('');
   const [audioState, setAudioState] = useState(true);
@@ -110,9 +110,20 @@ const App = () => {
     const tmpVertoClient = VertoInstanceManager.createInstance(
       vertoParams,
       callbacks,
-      true
+      true,
+      { isEnabled: true, autoAnswer: true, autoHangup: true, onNewCallAceppted: onNewCallAccepted }
     )
     setVertoClient(tmpVertoClient);
+  }
+
+  /**
+   * Handle accept call from CallKeep accept and answer freeswitch call
+   * 
+   * @param call Incoming freeswitch call
+   */
+  const onNewCallAccepted = (call: Call) => {
+    console.log('[App-onNewCallAccepted] answer freeswitch call. call.getId():', call.getId());
+    VertoInstanceManager.answerCall(call, { callerName: call.getCallerIdentification(), from: call.getCallerIdentification(), to: call.getCalleeIdentification(), useVideo: call.rtc.getHasVideo() });
   }
 
   const onLoginHandler = (login: string, password: string, url: string) => {
@@ -128,6 +139,12 @@ const App = () => {
       'login', 
       JSON.stringify(authParams)
     );
+  }
+
+  const onCallRequested = (call: Call) => {
+    if(call) {
+      console.log('[App-onCallRequested] call.destinationNumber:', call.getDestinationNumber(), ' - call.calleeIdentification:', call.getCalleeIdentification(), ' - call.callerIdentification:', call.getCallerIdentification())
+    }
   }
 
   const onLogoutClicked = async () => {
@@ -153,11 +170,23 @@ const App = () => {
     }
   }
 
+  const onCallHangup = (call?: Call) => {
+    console.log('[App-onCallHangup] call.id:', call.getId());
+  }
+
   const onCameraSwitchHandler = () => {
     console.log('[App - onCameraSwitchHandler] cameraFacing:', cameraFacing);
     setCameraFacing((prevState: string): string => {
       return prevState === 'front' ? 'rear' : 'front';
     })
+  }
+
+  const onMicrophoneMuted = (muted: boolean) => {
+    console.log('[App - onMicrophoneMuted] muted:', muted);
+  }
+
+  const onVideoMuted = (muted: boolean) => {
+    console.log('[App - onVideoMuted] muted:', muted);
   }
 
   return (
@@ -187,7 +216,11 @@ const App = () => {
           isCallScreenVisible={true}
           isRemoteAudioOff={false}
           isToolboxVisible={true}
+          onCallHangup={onCallHangup}
+          onCallRequested={onCallRequested}
           onLogoutClicked={onLogoutClicked}
+          onMicrophoneMuted={onMicrophoneMuted}
+          onVideoMuted={onVideoMuted}
           showLogs={true}
           viewKey="view1"
           viewType={ViewType.both} 

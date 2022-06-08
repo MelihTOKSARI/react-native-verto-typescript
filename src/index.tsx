@@ -30,7 +30,7 @@ export const VertoTypescriptView =
 import Call from './verto-sdk/verto/Call';
 import ConferenceLiveArray from './verto-sdk/conference/ConferenceLiveArray';
 import LoginScreen from './verto-sdk/vertoView/LoginScreen';
-import MakeCallParams from './verto-sdk/models/Call/MakeCallParams';
+import CallInfoParams from './verto-sdk/models/Call/CallInfoParams';
 import MediaState from './verto-sdk/enums/MediaState.enum';
 import VertoClient from './verto-sdk/verto/VertoClient';
 import VertoInstanceManager from './verto-sdk/vertoView/VertoInstanceManager';
@@ -40,9 +40,10 @@ import ViewType from './verto-sdk/enums/ViewType.enum';
 
 export {
     Call,
+    CallInfoParams,
     ConferenceLiveArray,
     LoginScreen,
-    MakeCallParams,
+    CallInfoParams as MakeCallParams, // TODO Remove this property after transition has completed for name convention
     MediaState,
     VertoClient,
     VertoInstanceManager,
