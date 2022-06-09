@@ -111,7 +111,7 @@ const App = () => {
       vertoParams,
       callbacks,
       true,
-      { isEnabled: true, autoAnswer: true, autoHangup: true, onNewCallAceppted: onNewCallAccepted }
+      { isEnabled: true, autoAnswer: true, autoDisplay: true, autoHangup: true, selfManaged: false, onNewCallAceppted: onNewCallAccepted }
     )
     setVertoClient(tmpVertoClient);
   }
