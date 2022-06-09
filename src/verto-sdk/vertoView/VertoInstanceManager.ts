@@ -50,7 +50,7 @@ class VertoInstance {
 
         if(callKeepParams && callKeepParams.isEnabled) {
             printLog(showLogs, '[VertoInstanceManager-constructor] setup CallKeep');
-            CallKeepHelperInstance.setup(true, this.onNewCallAnswered, this.callKeepParams.onShowIncomingCallUI);
+            CallKeepHelperInstance.setup(true, this.onNewCallAnswered, this.onNewCallRejected, this.callKeepParams.onShowIncomingCallUI);
         }
 
         return this.vertoClient;
@@ -108,7 +108,10 @@ class VertoInstance {
 
         if(this.callKeepParams && this.callKeepParams.isEnabled) {
             printLog(this.showLogs, '[vertoInstance-makeCall] before enabling CallKit');
-            this.activeCallUUID = CallKeepHelperInstance.startCall({ handle: callParams.to, localizedCallerName: callParams.callerName });
+            this.activeCallUUID = CallKeepHelperInstance.startCall({ 
+                handle: callParams.to, 
+                localizedCallerName: callParams.displayName || callParams.to || callParams.callerName 
+            });
             printLog(this.showLogs, '[vertoInstance-makeCall] after enabling CallKit');
         }
         
@@ -265,6 +268,15 @@ class VertoInstance {
         }
     }
 
+    /**
+     * End CallKeep call to seperate sip call from operating system call
+     */
+    public endCallKeepCall() {
+        if(this.callKeepParams && this.callKeepParams.isEnabled && this.activeCallUUID) {
+            CallKeepHelperInstance.hangup(this.activeCallUUID);
+        }
+    }
+
     private onClientClose = () => {
         printLog(this.showLogs, '[vertoInstance - onClientClose] socket is closed');
     }
@@ -320,8 +332,19 @@ class VertoInstance {
         if(this.callKeepParams && this.callKeepParams.isEnabled) {
             if(this.callKeepParams.autoAnswer) {
                 this.answerCall(call, { callerName: call.getCallerIdentification(), from: call.getCallerIdentification(), to: call.getCalleeIdentification(), useVideo: call.rtc.getHasVideo() });
-            } else if(this.callKeepParams.onNewCallAceppted) {
+            }
+            
+            if(this.callKeepParams.onNewCallAceppted) {
                 this.callKeepParams.onNewCallAceppted(call);
+            }
+        }
+    }
+
+    private onNewCallRejected = (handle: string) => {
+        printLog(this.showLogs, '[vertoInstance - onNewCallRejected] handle:', handle);
+        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+            if(this.callKeepParams.onNewCallRejected) {
+                this.callKeepParams.onNewCallRejected(handle);
             }
         }
     }
