@@ -8,5 +8,6 @@ export default interface CallInfoParams {
     callerName: string,
     from: string,
     to: string,
-    useVideo: boolean
+    useVideo: boolean,
+    displayName?: string
 }
