@@ -123,6 +123,21 @@ class VertoInstance {
         return call;
     }
 
+    /**
+     * Start a new Call Keep call
+     * 
+     * @param handle Number to make a call
+     * @param displayName Visible name on system call screen
+     */
+    public startCallKeepCall(handle: string, displayName: string) {
+        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+            this.activeCallUUID = CallKeepHelperInstance.startCall({ 
+                handle, 
+                localizedCallerName: displayName 
+            });
+        }
+    }
+
     // TODO Make callParams parameter mandatory after CallKeep integration
     /**
      * Answer a call if call is exist
