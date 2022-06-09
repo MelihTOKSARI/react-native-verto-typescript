@@ -243,6 +243,18 @@ class VertoInstance {
 
         onMuteResult(result);
     }
+
+    /**
+     * Display system incoming call
+     * 
+     * @param callInfoParams Caller information
+     * @param call Active call to show on Call Keep UI
+     */
+    public displayCallKeepCall(callInfoParams: CallInfoParams, call: Call) {
+        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+            CallKeepHelperInstance.displayIncomingCall(callInfoParams, call);
+        }
+    }
     
     /**
      * Hangup a call with cause code
@@ -321,7 +333,7 @@ class VertoInstance {
             printLog(this.showLogs, '[vertoInstance] No listener for onNewCall call.getCalleeIdentification():', call.getCalleeIdentification(), ' - call.getDestinationNumber():', call.getDestinationNumber());
         }
 
-        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+        if(this.callKeepParams && this.callKeepParams.isEnabled && this.callKeepParams.autoDisplay) {
             CallKeepHelperInstance.displayIncomingCall({ callerName: call.getCalleeIdentification(), from: call.getCallerIdentification(), to: '1000', useVideo: true }, call);
         }
     }
