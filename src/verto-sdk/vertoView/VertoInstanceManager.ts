@@ -50,7 +50,7 @@ class VertoInstance {
 
         if(callKeepParams && callKeepParams.isEnabled) {
             printLog(showLogs, '[VertoInstanceManager-constructor] setup CallKeep');
-            CallKeepHelperInstance.setup(true, this.onNewCallAnswered, this.onNewCallRejected, this.callKeepParams.onShowIncomingCallUI);
+            CallKeepHelperInstance.setup(true, this.onNewCallAnswered, this.onCallEnded, this.callKeepParams.onShowIncomingCallUI);
         }
 
         return this.vertoClient;
@@ -340,11 +340,11 @@ class VertoInstance {
         }
     }
 
-    private onNewCallRejected = (handle: string) => {
-        printLog(this.showLogs, '[vertoInstance - onNewCallRejected] handle:', handle);
+    private onCallEnded = (handle: string) => {
+        printLog(this.showLogs, '[vertoInstance - onCallEnded] handle:', handle);
         if(this.callKeepParams && this.callKeepParams.isEnabled) {
-            if(this.callKeepParams.onNewCallRejected) {
-                this.callKeepParams.onNewCallRejected(handle);
+            if(this.callKeepParams.onCallEnded) {
+                this.callKeepParams.onCallEnded(handle);
             }
         }
     }
