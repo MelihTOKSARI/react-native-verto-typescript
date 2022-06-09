@@ -5,5 +5,6 @@ export default interface CallKeepParams {
     autoAnswer: boolean,
     autoHangup: boolean,
     onNewCallAceppted?: (call: Call) => void,
+    onNewCallRejected?: (handle: string) => void,
     onShowIncomingCallUI?: (handle: string, name: string) => void
 }
