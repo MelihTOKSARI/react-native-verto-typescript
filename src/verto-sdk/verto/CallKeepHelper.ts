@@ -14,6 +14,7 @@ class CallKeepHelper {
     private showLogs = false;
 
     private onIncomingCallAnswered?: (incomingCall: Call) => void;
+    private onIncomingCallRejected?: (handle: string) => void;
     private onShowIncomingCallUI?: (handle: string, name: string) => void;
     private incomingCall: Call = null;
 
@@ -81,6 +82,10 @@ class CallKeepHelper {
         printLog(this.showLogs, `[CallKeepHelper-endCall] ${callUUID}, number: ${handle}`);
 
         this.removeCall(callUUID);
+
+        if(this.onIncomingCallRejected) {
+            this.onIncomingCallRejected(handle);
+        }
     };
 
     private getNewUuid = () => uuid.v4() as string;
@@ -171,7 +176,7 @@ class CallKeepHelper {
     /**
      * Initialize RNCallKeep with both ios and android
      */
-    public setup = (showsLog = false, onIncomingCallAnswered?: (incomingCall: Call) => void, onShowIncomingCallUI?: (handle: string, name: string) => void) => {
+    public setup = (showsLog = false, onIncomingCallAnswered?: (incomingCall: Call) => void, onIncomingCallRejected?: (handle: string) => void, onShowIncomingCallUI?: (handle: string, name: string) => void) => {
         this.showLogs = showsLog;
         try {
             RNCallKeep.setup({
@@ -189,6 +194,7 @@ class CallKeepHelper {
             RNCallKeep.setAvailable(true);
 
             this.onIncomingCallAnswered = onIncomingCallAnswered;
+            this.onIncomingCallRejected = onIncomingCallRejected;
             this.onShowIncomingCallUI = onShowIncomingCallUI;
 
             printLog(this.showLogs, '[CallKeepHelper-setup] finished setting up CallKeep');
