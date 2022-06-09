@@ -50,7 +50,7 @@ class VertoInstance {
 
         if(callKeepParams && callKeepParams.isEnabled) {
             printLog(showLogs, '[VertoInstanceManager-constructor] setup CallKeep');
-            CallKeepHelperInstance.setup(true, this.onNewCallAnswered, this.onCallEnded, this.callKeepParams.onShowIncomingCallUI);
+            CallKeepHelperInstance.setup(true, this.callKeepParams.selfManaged, this.onNewCallAnswered, this.onCallEnded, this.callKeepParams.onShowIncomingCallUI);
         }
 
         return this.vertoClient;
@@ -107,12 +107,11 @@ class VertoInstance {
         }
 
         if(this.callKeepParams && this.callKeepParams.isEnabled) {
-            printLog(this.showLogs, '[vertoInstance-makeCall] before enabling CallKit');
+            printLog(this.showLogs, '[vertoInstance-makeCall] CallKit params:', this.callKeepParams);
             this.activeCallUUID = CallKeepHelperInstance.startCall({ 
                 handle: callParams.to, 
                 localizedCallerName: callParams.displayName || callParams.to || callParams.callerName 
             });
-            printLog(this.showLogs, '[vertoInstance-makeCall] after enabling CallKit');
         }
         
         if(call) {

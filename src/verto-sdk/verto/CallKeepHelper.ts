@@ -176,7 +176,12 @@ class CallKeepHelper {
     /**
      * Initialize RNCallKeep with both ios and android
      */
-    public setup = (showsLog = false, onIncomingCallAnswered?: (incomingCall: Call) => void, onCallEnded?: (handle: string) => void, onShowIncomingCallUI?: (handle: string, name: string) => void) => {
+    public setup = (
+        showsLog = false, 
+        selfManaged = true,
+        onIncomingCallAnswered?: (incomingCall: Call) => void, 
+        onCallEnded?: (handle: string) => void, onShowIncomingCallUI?: 
+        (handle: string, name: string) => void) => {
         this.showLogs = showsLog;
         try {
             RNCallKeep.setup({
@@ -188,7 +193,8 @@ class CallKeepHelper {
                     alertDescription: 'This application needs to access your phone accounts',
                     cancelButton: 'Cancel',
                     okButton: 'ok',
-                    additionalPermissions: [PermissionsAndroid.PERMISSIONS.READ_CONTACTS]
+                    additionalPermissions: [PermissionsAndroid.PERMISSIONS.READ_CONTACTS],
+                    selfManaged
                 },
             });
             RNCallKeep.setAvailable(true);
