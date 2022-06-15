@@ -228,6 +228,11 @@ class VertoInstance {
                 this.startLocalStream(call.getId(), 'audio');
                 call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
             }
+
+            if(this.callKeepParams && this.callKeepParams.isEnabled && this.activeCallUUID) {
+                CallKeepHelperInstance.setOnMute(this.activeCallUUID, mute);
+            }
+            
             result = true;
         }
 
