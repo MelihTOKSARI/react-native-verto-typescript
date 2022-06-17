@@ -13,7 +13,7 @@ class CallKeepHelper {
     private mutedCalls: Map<string, boolean> = new Map();
     private showLogs = false;
 
-    private onIncomingCallAnswered?: (incomingCall: Call) => void;
+    private onIncomingCallAnswered?: (incomingCall: Call, callUUID: string) => void;
     private onCallEnded?: (handle: string) => void;
     private onShowIncomingCallUI?: (handle: string, name: string) => void;
     private incomingCall: Call = null;
@@ -32,7 +32,7 @@ class CallKeepHelper {
         printLog(this.showLogs, `[CallKeepHelper-answerCall] ${callUUID}, number: ${number}`);
     
         if(this.onIncomingCallAnswered) {
-            this.onIncomingCallAnswered(this.incomingCall);
+            this.onIncomingCallAnswered(this.incomingCall, callUUID);
         }
         RNCallKeep.startCall(callUUID, number, number);
         BackgroundTimer.setTimeout(() => {
@@ -162,6 +162,8 @@ class CallKeepHelper {
     public hangup = (callUUID: string) => {
         if(callUUID) {
             RNCallKeep.endCall(callUUID);
+        } else {
+            printLog(this.showLogs, '[CallKeepHelper-hangup] callUUID is undefined');
         }
     };
 
@@ -179,7 +181,7 @@ class CallKeepHelper {
     public setup = (
         showsLog = false, 
         selfManaged = true,
-        onIncomingCallAnswered?: (incomingCall: Call) => void, 
+        onIncomingCallAnswered?: (incomingCall: Call, callUUID: string) => void, 
         onCallEnded?: (handle: string) => void, onShowIncomingCallUI?: 
         (handle: string, name: string) => void) => {
         this.showLogs = showsLog;

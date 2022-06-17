@@ -150,11 +150,10 @@ class VertoInstance {
             call.answer();
             this.activeCalls.push(call);
 
-            if(this.callKeepParams && this.callKeepParams.isEnabled && callParams) {
-                printLog(this.showLogs, '[vertoInstance-makeCall] before enabling CallKit');
-                this.activeCallUUID = CallKeepHelperInstance.startCall({ handle: callParams.to, localizedCallerName: callParams.callerName });
-                printLog(this.showLogs, '[vertoInstance-makeCall] after enabling CallKit');
-            }
+            // if(this.callKeepParams && this.callKeepParams.isEnabled && callParams) {
+            //     this.activeCallUUID = CallKeepHelperInstance.startCall({ handle: callParams.to, localizedCallerName: callParams.callerName });
+            //     printLog(this.showLogs, '[vertoInstance-answerCall] call answered callUUID:', this.activeCallUUID);
+            // }
         }
     }
 
@@ -358,9 +357,11 @@ class VertoInstance {
         }
     }
 
-    private onNewCallAnswered = (call: Call) => {
+    private onNewCallAnswered = (call: Call, callUUID: string) => {
         printLog(this.showLogs, '[vertoInstance - onNewCallAnswered] call:', call);
         if(this.callKeepParams && this.callKeepParams.isEnabled) {
+            this.activeCallUUID = callUUID;
+            printLog(this.showLogs, '[vertoInstance-onNewCallAnswered] activeCallUUID:', this.activeCallUUID);
             if(this.callKeepParams.autoAnswer) {
                 this.answerCall(call, { callerName: call.getCallerIdentification(), from: call.getCallerIdentification(), to: call.getCalleeIdentification(), useVideo: call.rtc.getHasVideo() });
             }
