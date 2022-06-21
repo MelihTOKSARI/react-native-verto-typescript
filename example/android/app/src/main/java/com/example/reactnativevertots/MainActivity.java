@@ -1,4 +1,4 @@
-package com.example.reactnativevertotypescript;
+package com.example.reactnativevertots;
 
 import androidx.annotation.NonNull;
 

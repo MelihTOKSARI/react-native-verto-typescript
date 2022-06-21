@@ -1,4 +1,4 @@
-package com.reactnativevertotypescript;
+package com.reactnativevertots;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

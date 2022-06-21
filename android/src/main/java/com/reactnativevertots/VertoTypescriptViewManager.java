@@ -1,4 +1,4 @@
-package com.reactnativevertotypescript;
+package com.reactnativevertots;
 
 import android.graphics.Color;
 import android.view.View;

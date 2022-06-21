@@ -2,5 +2,5 @@ rootProject.name = 'VertoTypescriptExample'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 
-include ':reactnativevertotypescript'
-project(':reactnativevertotypescript').projectDir = new File(rootProject.projectDir, '../../android')
+include ':reactnativevertots'
+project(':reactnativevertots').projectDir = new File(rootProject.projectDir, '../../android')
