@@ -1,6 +1,6 @@
 {
-  "name": "react-native-verto-typescript-example",
-  "description": "Example app for react-native-verto-typescript",
+  "name": "react-native-verto-ts-example",
+  "description": "Example app for react-native-verto-ts",
   "version": "0.0.1",
   "private": true,
   "scripts": {

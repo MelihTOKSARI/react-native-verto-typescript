@@ -1,7 +1,7 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 import RNCallKeep from 'react-native-callkeep';
 import uuid from 'react-native-uuid';
-import { CallInfoParams } from 'react-native-verto-typescript';
+import { CallInfoParams } from 'react-native-verto-ts';
 import BackgroundTimer from 'react-native-background-timer';
 
 import { printLog } from '../vertoView/utils';

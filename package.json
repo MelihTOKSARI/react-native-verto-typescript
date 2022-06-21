@@ -1,5 +1,5 @@
 {
-  "name": "react-native-verto-typescript",
+  "name": "react-native-verto-ts",
   "version": "0.2.44",
   "description": "React native package for verto with typescript support",
   "main": "lib/commonjs/index",
@@ -13,7 +13,7 @@
     "android",
     "ios",
     "cpp",
-    "react-native-verto-typescript.podspec",
+    "react-native-verto-ts.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/MelihTOKSARI/react-native-verto-typescript",
-  "author": "Melih <melih.toksari.npm@gmail.com> (https://github.com/MelihTOKSARI)",
+  "repository": "https://github.com/armakomnpm/react-native-verto-ts",
+  "author": "Armakom <npm@armakom.com> (https://github.com/armakomnpm)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MelihTOKSARI/react-native-verto-typescript/issues"
+    "url": "https://github.com/armakomnpm/react-native-verto-ts/issues"
   },
-  "homepage": "https://github.com/MelihTOKSARI/react-native-verto-typescript#readme",
+  "homepage": "https://github.com/armakomnpm/react-native-verto-ts#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -73,8 +73,8 @@
     "react-native": "*",
     "react-native-background-timer": "^2.4.1",
     "react-native-callkeep": "^4.3.3",
-    "react-native-webrtc": ">=1.87.3",
-    "react-native-uuid": "^2.0.1"
+    "react-native-uuid": "^2.0.1",
+    "react-native-webrtc": ">=1.87.3"
   },
   "jest": {
     "preset": "react-native",
@@ -148,5 +148,8 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.6"
   }
 }

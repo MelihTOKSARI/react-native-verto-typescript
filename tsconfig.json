@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-verto-typescript": ["./src/index"]
+      "react-native-verto-ts": ["./src/index"]
     },
     "allowUnreachableCode": true,
     "allowUnusedLabels": true,

@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 
-import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoInstanceManager, VertoParams, VertoView, ViewType } from 'react-native-verto-typescript';
+import { Call, ConferenceLiveArray, LoginScreen, VertoClient, VertoInstanceManager, VertoParams, VertoView, ViewType } from 'react-native-verto-ts';
 
 const App = () => {
 

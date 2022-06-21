@@ -8,7 +8,7 @@ React native package for verto with typescript support. This package is basicall
 
 Run below command to install and use React Native Verto Typescript package.
 ```sh
-npm install react-native-verto-typescript
+npm install react-native-verto-ts
 ```
 
 This package provides video conferencing over webrtc. Therefore, you must run below command to install react-native-webrtc 
@@ -28,7 +28,7 @@ npm install react-native-background-timer
 Web socket connection can be created through VertoInstanceManager singleton class. 
 
 ```js
-import { VertoInstanceManager } from "react-native-verto-typescript";
+import { VertoInstanceManager } from "react-native-verto-ts";
 
 const vertoParams = {
     webSocket: {
