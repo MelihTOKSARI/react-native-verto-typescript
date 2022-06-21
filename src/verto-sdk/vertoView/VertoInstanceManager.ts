@@ -25,7 +25,7 @@ class VertoInstance {
 
     public createInstance(params: VertoParams, callbacks: defaultVertoCallbacks, showLogs?: boolean, callKeepParams?: CallKeepParams): VertinhoClient {
         printLog(showLogs, '[vertoInstance] params:', params);
-        if(!this.vertoClient) {
+        if (!this.vertoClient) {
             printLog(showLogs, '[vertoInstance] vertoClient is null and will be instantiated');
             this.vertoClient = new VertinhoClient(params, {
                 ...callbacks,
@@ -35,7 +35,7 @@ class VertoInstance {
                 onPlayLocalVideo: this.onPlayLocalVideo,
                 onPlayRemoteVideo: this.onPlayRemoteVideo
             });
-        } else if(!this.vertoClient.socketReady()) {
+        } else if (!this.vertoClient.socketReady()) {
             printLog(showLogs, '[vertoInstance] trying to reconnect vertoClient');
             this.vertoClient.connect();
         } else {
@@ -48,7 +48,7 @@ class VertoInstance {
         this.callKeepParams = callKeepParams;
         this.showLogs = showLogs;
 
-        if(callKeepParams && callKeepParams.isEnabled) {
+        if (callKeepParams && callKeepParams.isEnabled) {
             printLog(showLogs, '[VertoInstanceManager-constructor] setup CallKeep');
             CallKeepHelperInstance.setup(true, this.callKeepParams.selfManaged, this.onNewCallAnswered, this.onCallEnded, this.callKeepParams.onShowIncomingCallUI);
         }
@@ -57,14 +57,14 @@ class VertoInstance {
     }
 
     public connect() {
-        if(this.vertoClient && !this.vertoClient.socketReady()) {
+        if (this.vertoClient && !this.vertoClient.socketReady()) {
             this.vertoClient.connect();
         }
     }
 
     public destroy() {
         printLog(this.showLogs, '[vertoInstance - destroy] requested...');
-        if(this.vertoClient) {
+        if (this.vertoClient) {
             printLog(this.showLogs, '[vertoInstance - destroy] try to destroy socket...');
             this.vertoClient.destroy();
             this.vertoClient = undefined;
@@ -72,7 +72,7 @@ class VertoInstance {
     }
 
     public getInstance(key?: string, callbackListeners?: any) {
-        if(key && callbackListeners) {
+        if (key && callbackListeners) {
             printLog(this.showLogs, '[vertoInstance] key:', key, ' - callbackListeners:', callbackListeners);
             this.instanceCallbackListenerKey = key;
             this.instanceCallbackListener = callbackListeners;
@@ -94,30 +94,30 @@ class VertoInstance {
      * @returns Newly created call
      */
     public makeCall(callParams: CallInfoParams): Call {
-        if(!this.vertoClient) {
+        if (!this.vertoClient) {
             printLog(this.showLogs, '[vertoInstance] vertoClient is not instantiated!!!');
             return;
         }
 
         let call: Call;
-        if(callParams.useVideo) {
+        if (callParams.useVideo) {
             call = this.vertoClient.makeVideoCall(callParams);
         } else {
             call = this.vertoClient.makeCall(callParams);
         }
 
-        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+        if (this.callKeepParams && this.callKeepParams.isEnabled) {
             printLog(this.showLogs, '[vertoInstance-makeCall] CallKit params:', this.callKeepParams);
-            this.activeCallUUID = CallKeepHelperInstance.startCall({ 
-                handle: callParams.to, 
-                localizedCallerName: callParams.displayName || callParams.to || callParams.callerName 
+            this.activeCallUUID = CallKeepHelperInstance.startCall({
+                handle: callParams.to,
+                localizedCallerName: callParams.displayName || callParams.to || callParams.callerName
             });
         }
-        
-        if(call) {
+
+        if (call) {
             this.activeCalls.push(call);
         }
-        
+
         printLog(this.showLogs, '[vertoInstance-makeCall] this.call is null?', (call == null));
 
         return call;
@@ -130,10 +130,10 @@ class VertoInstance {
      * @param displayName Visible name on system call screen
      */
     public startCallKeepCall(handle: string, displayName: string) {
-        if(this.callKeepParams && this.callKeepParams.isEnabled) {
-            this.activeCallUUID = CallKeepHelperInstance.startCall({ 
-                handle, 
-                localizedCallerName: displayName 
+        if (this.callKeepParams && this.callKeepParams.isEnabled) {
+            this.activeCallUUID = CallKeepHelperInstance.startCall({
+                handle,
+                localizedCallerName: displayName
             });
         }
     }
@@ -146,7 +146,7 @@ class VertoInstance {
      * @param callParams Contains information like numbers of caller and callee, display name and video state
      */
     public answerCall(call: Call, callParams?: CallInfoParams) {
-        if(call) {
+        if (call) {
             call.answer();
             this.activeCalls.push(call);
 
@@ -165,7 +165,7 @@ class VertoInstance {
     public insertCall(call: Call) {
         const callIndex = this.activeCalls.findIndex(c => c.getId() === call.getId());
 
-        if(callIndex === -1) {
+        if (callIndex === -1) {
             this.activeCalls.push(call);
         }
     }
@@ -177,7 +177,7 @@ class VertoInstance {
      */
     public removeCall(callId: string) {
         const callIndex = this.activeCalls.findIndex(c => c.getId() === callId);
-        if(callIndex > -1) {
+        if (callIndex > -1) {
             this.activeCalls.splice(callIndex, 1);
         }
     }
@@ -189,7 +189,7 @@ class VertoInstance {
      */
     public startLocalStream(callId: string, kind?: string) {
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call && call.rtc) {
+        if (call && call.rtc) {
             // call.rtc.reAddLocalStreamTracks();
             call.rtc.reAddLocalTracks(kind);
         }
@@ -202,7 +202,7 @@ class VertoInstance {
      */
     public stopLocalStream(callId: string, kind?: string) {
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call && call.rtc) {
+        if (call && call.rtc) {
             // call.rtc.removeLocalStreamTracks();
             call.rtc.removeLocalTracks(kind);
         }
@@ -218,9 +218,9 @@ class VertoInstance {
     public muteLocalAudio(callId: string, mute: boolean, onMuteResult?: Function) {
         let result = false;
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getAudioTracks()) {
+        if (call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getAudioTracks()) {
             // call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
-            if(mute && call.rtc.getLocalStream().getAudioTracks()[0]) {
+            if (mute && call.rtc.getLocalStream().getAudioTracks()[0]) {
                 call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
                 this.stopLocalStream(call.getId(), 'audio');
             } else {
@@ -228,10 +228,10 @@ class VertoInstance {
                 call.rtc.getLocalStream().getAudioTracks()[0].enabled = !mute;
             }
 
-            if(this.callKeepParams && this.callKeepParams.isEnabled && this.activeCallUUID) {
+            if (this.callKeepParams && this.callKeepParams.isEnabled && this.activeCallUUID) {
                 CallKeepHelperInstance.setOnMute(this.activeCallUUID, mute);
             }
-            
+
             result = true;
         }
 
@@ -248,9 +248,9 @@ class VertoInstance {
     public muteLocalVideo(callId: string, mute: boolean, onMuteResult?: Function) {
         let result = false;
         const call: Call = this.activeCalls.find(c => c.getId() === callId);
-        if(call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getVideoTracks()) {
+        if (call && call.rtc && call.rtc.getLocalStream() && call.rtc.getLocalStream().getVideoTracks()) {
             // call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
-            if(mute && call.rtc.getLocalStream().getVideoTracks()[0]) {
+            if (mute && call.rtc.getLocalStream().getVideoTracks()[0]) {
                 call.rtc.getLocalStream().getVideoTracks()[0].enabled = !mute;
                 this.stopLocalStream(call.getId(), 'video');
             } else {
@@ -270,11 +270,11 @@ class VertoInstance {
      * @param call Active call to show on Call Keep UI
      */
     public displayCallKeepCall(callInfoParams: CallInfoParams, call: Call) {
-        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+        if (this.callKeepParams && this.callKeepParams.isEnabled) {
             CallKeepHelperInstance.displayIncomingCall(callInfoParams, call);
         }
     }
-    
+
     /**
      * Hangup a call with cause code
      * 
@@ -282,19 +282,19 @@ class VertoInstance {
      * @param causeCode Reason to end call. If not set, send 'NORMAL_CLEARING' as a default code
     */
     public hangUpCall(call: Call, causeCode?: number) {
-        if(!this.vertoClient) {
+        if (!this.vertoClient) {
             return;
         }
 
-        if(call && call.getId()) {
-          printLog(this.showLogs, '[vertoInstance] hangupCall call is null?', (call == null));
-          this.removeCall(call.getId());
-          this.vertoClient.hangup(call.getId(), causeCode);
-          if(this.callKeepParams && this.callKeepParams.isEnabled) {
-              CallKeepHelperInstance.hangup(this.activeCallUUID);
-          }
+        if (call && call.getId()) {
+            printLog(this.showLogs, '[vertoInstance] hangupCall call is null?', (call == null));
+            this.removeCall(call.getId());
+            this.vertoClient.hangup(call.getId(), causeCode);
+            if (this.callKeepParams && this.callKeepParams.isEnabled) {
+                CallKeepHelperInstance.hangup(this.activeCallUUID);
+            }
         } else {
-          printLog(this.showLogs, '[vertoInstance] hangupCall else block');
+            printLog(this.showLogs, '[vertoInstance] hangupCall else block');
         }
     }
 
@@ -302,7 +302,7 @@ class VertoInstance {
      * End CallKeep call to seperate sip call from operating system call
      */
     public endCallKeepCall() {
-        if(this.callKeepParams && this.callKeepParams.isEnabled && this.activeCallUUID) {
+        if (this.callKeepParams && this.callKeepParams.isEnabled && this.activeCallUUID) {
             CallKeepHelperInstance.hangup(this.activeCallUUID);
         }
     }
@@ -313,7 +313,7 @@ class VertoInstance {
 
     private onCallStateChange = (state: any, callId: string) => {
         printLog(this.showLogs, '[vertoInstance] onCallStateChange => ', state, ' - instanceCallbackListeners:', this.instanceCallbackListeners);
-        if(this.instanceCallbacks && this.instanceCallbacks.onCallStateChange) {
+        if (this.instanceCallbacks && this.instanceCallbacks.onCallStateChange) {
             this.instanceCallbacks.onCallStateChange(state, callId);
         }
 
@@ -323,27 +323,27 @@ class VertoInstance {
             printLog(this.showLogs, '[vertoInstance] No listener for onCallStateChange');
         }
 
-        if(state.current.name === 'destroy') {
+        if (state.current.name === 'destroy') {
             this.onCallDestroyed(callId);
         }
     }
 
     private onCallDestroyed = (callId: string) => {
         printLog(this.showLogs, '[VertoInstanceManager-onCallDestroyed] 1 callId:', callId);
-        if(callId && this.callKeepParams && this.callKeepParams.autoHangup) {
+        if (callId && this.callKeepParams && this.callKeepParams.autoHangup) {
             printLog(this.showLogs, '[VertoInstanceManager-onCallDestroyed] 2');
             const call = this.activeCalls.find(t => t.getId() === callId);
             printLog(this.showLogs, '[VertoInstanceManager-onCallDestroyed] 3');
-            if(call) {
+            if (call) {
                 printLog(this.showLogs, '[VertoInstanceManager-onCallDestroyed] 4');
                 this.hangUpCall(call);
             }
         }
     }
-    
+
     private onNewCall = (call: Call) => {
         printLog(this.showLogs, '[vertoInstance] onNewCall:', call);
-        if(this.instanceCallbacks && this.instanceCallbacks.onNewCall) {
+        if (this.instanceCallbacks && this.instanceCallbacks.onNewCall) {
             this.instanceCallbacks.onNewCall(call);
         }
         if (this.instanceCallbackListener && this.instanceCallbackListener['onNewCall']) {
@@ -352,21 +352,34 @@ class VertoInstance {
             printLog(this.showLogs, '[vertoInstance] No listener for onNewCall call.getCalleeIdentification():', call.getCalleeIdentification(), ' - call.getDestinationNumber():', call.getDestinationNumber());
         }
 
-        if(this.callKeepParams && this.callKeepParams.isEnabled && this.callKeepParams.autoDisplay) {
-            CallKeepHelperInstance.displayIncomingCall({ callerName: call.getCalleeIdentification(), from: call.getCallerIdentification(), to: '1000', useVideo: true }, call);
+        if (this.callKeepParams && this.callKeepParams.isEnabled && this.callKeepParams.autoDisplay && !this.isCallExcluded(call)) {
+            CallKeepHelperInstance.displayIncomingCall({ callerName: call.getCalleeIdentification(), from: call.getCallerIdentification(), to: '1000', useVideo: false }, call);
         }
+    }
+
+
+    private isCallExcluded(call: Call): boolean {
+        if (!this.callKeepParams || !this.callKeepParams.isEnabled || !this.callKeepParams.excludedCallParams) {
+            return false;
+        }
+
+        printLog(this.showLogs, '[vertoInstance] isCallExcluded => call.getCalleeIdentification() => ', call.getCalleeIdentification())
+        const excludedCall = this.callKeepParams.excludedCallParams.startsWith.find(item => call.getCalleeIdentification().startsWith(item));
+        printLog(this.showLogs, '[vertoInstance] isCallExcluded => excludedCall => ', excludedCall)
+        return excludedCall != null;
     }
 
     private onNewCallAnswered = (call: Call, callUUID: string) => {
         printLog(this.showLogs, '[vertoInstance - onNewCallAnswered] call:', call);
-        if(this.callKeepParams && this.callKeepParams.isEnabled) {
+        if (this.callKeepParams && this.callKeepParams.isEnabled) {
             this.activeCallUUID = callUUID;
             printLog(this.showLogs, '[vertoInstance-onNewCallAnswered] activeCallUUID:', this.activeCallUUID);
-            if(this.callKeepParams.autoAnswer) {
-                this.answerCall(call, { callerName: call.getCallerIdentification(), from: call.getCallerIdentification(), to: call.getCalleeIdentification(), useVideo: call.rtc.getHasVideo() });
+            if (this.callKeepParams.autoAnswer) {
+                // this.answerCall(call, { callerName: call.getCallerIdentification(), from: call.getCallerIdentification(), to: call.getCalleeIdentification(), useVideo: call.rtc.getHasVideo() });
+                this.answerCall(call, { callerName: call.getCallerIdentification(), from: call.getCallerIdentification(), to: call.getCalleeIdentification(), useVideo: false });
             }
-            
-            if(this.callKeepParams.onNewCallAceppted) {
+
+            if (this.callKeepParams.onNewCallAceppted) {
                 this.callKeepParams.onNewCallAceppted(call);
             }
         }
@@ -374,8 +387,8 @@ class VertoInstance {
 
     private onCallEnded = (handle: string) => {
         printLog(this.showLogs, '[vertoInstance - onCallEnded] handle:', handle);
-        if(this.callKeepParams && this.callKeepParams.isEnabled) {
-            if(this.callKeepParams.onCallEnded) {
+        if (this.callKeepParams && this.callKeepParams.isEnabled) {
+            if (this.callKeepParams.onCallEnded) {
                 this.callKeepParams.onCallEnded(handle);
             }
         }
@@ -383,7 +396,7 @@ class VertoInstance {
 
     private onPlayLocalVideo = (stream: MediaStream) => {
         printLog(this.showLogs, '[vertoInstance] onPlayLocalVideo stream.toURL:', stream);
-        if(this.instanceCallbacks && this.instanceCallbacks.onPlayLocalVideo) {
+        if (this.instanceCallbacks && this.instanceCallbacks.onPlayLocalVideo) {
             this.instanceCallbacks.onPlayLocalVideo(stream);
         }
         if (this.instanceCallbackListener && this.instanceCallbackListener['onPlayLocalVideo']) {
@@ -395,7 +408,7 @@ class VertoInstance {
 
     private onPlayRemoteVideo = (stream: MediaStream) => {
         printLog(this.showLogs, '[vertoInstance] onPlayRemoteVideo stream.toURL:', stream.toURL());
-        if(this.instanceCallbacks && this.instanceCallbacks.onPlayRemoteVideo) {
+        if (this.instanceCallbacks && this.instanceCallbacks.onPlayRemoteVideo) {
             this.instanceCallbacks.onPlayRemoteVideo(stream);
         }
         if (this.instanceCallbackListener && this.instanceCallbackListener['onPlayRemoteVideo']) {
