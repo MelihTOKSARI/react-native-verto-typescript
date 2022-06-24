@@ -1,7 +1,7 @@
 # <p align="center">React Native Verto Typescript</p>
 
 ## Important Update!
-This package is depreceated and won't be maintained. Please, use this package [react-native-verto-ts](https://github.com/armakomnpm/react-native-verto-ts) for further updates.
+This package is depreceated and won't be maintained. Please, use this package [react-native-webrtc-audio](https://github.com/armakomnpm/react-native-webrtc-audio) for further updates.
 
 <hr />
 
