@@ -1,5 +1,11 @@
 # <p align="center">React Native Verto Typescript</p>
 
+## Important Update!
+This package is depreceated and won't be maintained. Please, use this package [react-native-verto-ts](https://github.com/armakomnpm/react-native-verto-ts) for further updates.
+
+<hr />
+
+## Description
 React native package for verto with typescript support. This package is basically constructed upon [react-native-verto](https://github.com/rizvanrzayev/react-native-verto) package and extra features are added to change conference parameters dynamically. Besides this, socket connection and verto views are seperated from each other. At last, package is mostly converted to typecript from pure javascript.
 
 <hr />
