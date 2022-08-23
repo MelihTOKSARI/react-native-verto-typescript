@@ -274,7 +274,7 @@ PODS:
     - glog
   - react-native-background-timer (2.4.1):
     - React-Core
-  - react-native-verto-typescript (0.2.36):
+  - react-native-verto-ts (0.2.46):
     - React-Core
   - react-native-webrtc (1.92.2):
     - React-Core
@@ -393,7 +393,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
-  - react-native-verto-typescript (from `../..`)
+  - react-native-verto-ts (from `../..`)
   - react-native-webrtc (from `../node_modules/react-native-webrtc`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -465,7 +465,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
-  react-native-verto-typescript:
+  react-native-verto-ts:
     :path: "../.."
   react-native-webrtc:
     :path: "../node_modules/react-native-webrtc"
@@ -532,7 +532,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d9c8eb0b53f0da206fed56612b289fec84991157
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
-  react-native-verto-typescript: 4770692114b71307f5eda9296b2e1071d71d04a3
+  react-native-verto-ts: aafe8c54680b3aba805f41532d674bc27437e489
   react-native-webrtc: 41526e4060dac373c18676f866962d4180ee47b9
   React-perflogger: 73732888d37d4f5065198727b167846743232882
   React-RCTActionSheet: 96c6d774fa89b1f7c59fc460adc3245ba2d7fd79
@@ -551,6 +551,6 @@ SPEC CHECKSUMS:
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 1f61369b5683fa66fa7b9d453fc3b4b5b6187857
+PODFILE CHECKSUM: c26abb547754415a39d8f30445a0a81f8900d616
 
 COCOAPODS: 1.11.2
