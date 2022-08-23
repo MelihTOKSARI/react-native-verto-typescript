@@ -50,7 +50,7 @@ const VertoView = (props: Props) => {
 
   const [localStream, setLocalStream] = useState<MediaStream>(null);
   const [localStreamURL, setLocalStreamURL] = useState('');
-  
+
   const [remoteStream, setRemoteStream] = useState<MediaStream>(null);
   const [remoteStreamURL, setRemoteStreamURL] = useState('');
 
@@ -79,7 +79,7 @@ const VertoView = (props: Props) => {
   // }, [props.callState])
 
   useEffect(() => {
-    if(props.localStream) {
+    if (props.localStream) {
       setLocalStream(props.localStream);
       setLocalStreamURL(props.localStream.toURL());
       updateStreamDependencies();
@@ -87,7 +87,7 @@ const VertoView = (props: Props) => {
   }, [props.localStream]);
 
   useEffect(() => {
-    if(props.remoteStream) {
+    if (props.remoteStream) {
       setRemoteStream(props.remoteStream);
       setRemoteStreamURL(props.remoteStream.toURL());
       updateStreamDependencies();
@@ -112,7 +112,7 @@ const VertoView = (props: Props) => {
 
   useEffect(() => {
     printLog(props.showLogs, '[vertoView] useEffect props.call is null?', (props.call == null));
-    if(props.call) {
+    if (props.call) {
       activeCall.current = props.call;
       setCall(props.call);
     }
@@ -134,7 +134,7 @@ const VertoView = (props: Props) => {
 
   const getVertoClient = () => {
     printLog(props.showLogs, '[vertoView] getVertoClient props.viewKey:', props.viewKey);
-    if(!vertoClient) {
+    if (!vertoClient) {
       initializeVertoClient();
     }
 
@@ -150,7 +150,7 @@ const VertoView = (props: Props) => {
     //   return;
     // }
 
-    if(viewKey !== props.viewKey) {
+    if (viewKey !== props.viewKey) {
       return;
     }
 
@@ -159,18 +159,18 @@ const VertoView = (props: Props) => {
       clearStreamProperties();
     }
 
-    if(state && state.current && (state.current.name === "active")) {
+    if (state && state.current && (state.current.name === "active")) {
       updateStreamDependencies();
     }
   }
 
   const onNewCall = (viewKey: string, call: Call) => {
-    if(!call || !call.getId()) {
+    if (!call || !call.getId()) {
       printLog(props.showLogs, '[vertoView] onNewCall return! call is null?', (call == null));
       return;
     }
 
-    if(viewKey !== props.viewKey) {
+    if (viewKey !== props.viewKey) {
       return;
     }
 
@@ -181,7 +181,7 @@ const VertoView = (props: Props) => {
   }
 
   const onPlayLocalVideo = (viewKey: string, stream: MediaStream) => {
-    if(viewKey !== props.viewKey) {
+    if (viewKey !== props.viewKey) {
       return;
     }
     printLog(props.showLogs, '[vertoView] onPlayLocalVideo viewKey:', props.viewKey, ' - stream.toURL:', stream);
@@ -189,18 +189,18 @@ const VertoView = (props: Props) => {
     setLocalStreamURL(stream.toURL());
 
     const audioTrack = getAudioTrack(stream);
-    if(audioTrack) {
+    if (audioTrack) {
       muteAudio(props.isAudioOff);
     }
 
     const videoTrack = getVideoTrack(stream);
-    if(videoTrack) {
+    if (videoTrack) {
       muteVideo(props.isCameraOff);
     }
   }
 
   const onPlayRemoteVideo = (viewKey: string, stream: MediaStream) => {
-    if(viewKey !== props.viewKey) {
+    if (viewKey !== props.viewKey) {
       return;
     }
 
@@ -244,15 +244,15 @@ const VertoView = (props: Props) => {
 
     setIncomingCall(null);
     setHasIncomingCall(false);
-    if(!props.isToolboxVisible) {
+    if (!props.isToolboxVisible) {
       props.isToolboxVisible = true;
     }
 
-    if(!props.isAudioOff) {
+    if (!props.isAudioOff) {
       props.isAudioOff = true;
     }
 
-    if(!props.isCameraOff) {
+    if (!props.isCameraOff) {
       props.isCameraOff = true;
     }
   }
@@ -260,7 +260,7 @@ const VertoView = (props: Props) => {
   /**
    * Update status of stream dependencies after stream is started
    */
-   const updateStreamDependencies = () => {
+  const updateStreamDependencies = () => {
     setStreamStarted(true);
     muteAudio(props.isAudioOff);
     muteRemoteAudio(props.isRemoteAudioOff);
@@ -269,7 +269,7 @@ const VertoView = (props: Props) => {
 
   const acceptIncomingCall = () => {
     setHasIncomingCall(false);
-    if(incomingCall) {
+    if (incomingCall) {
       incomingCall.answer();
       activeCall.current = incomingCall;
       printLog(props.showLogs, '[vertoView] activeCall is null?', (activeCall.current == null));
@@ -285,28 +285,28 @@ const VertoView = (props: Props) => {
   }
 
   const muteAudio = (mute: boolean) => {
-    if(!localStream || mute == null) {
+    if (!localStream || mute == null) {
       return;
     }
 
     const localAudioTrack = getAudioTrack(localStream);
-    if(localAudioTrack) {
+    if (localAudioTrack) {
       localAudioTrack.enabled = !mute;
-      if(props.onAudioStateChanged) {
+      if (props.onAudioStateChanged) {
         props.onAudioStateChanged({ mute });
       }
     }
   }
 
   const muteRemoteAudio = (mute: boolean) => {
-    if(!remoteStream || mute == null) {
+    if (!remoteStream || mute == null) {
       return;
     }
 
     const remoteAudioTrack = getAudioTrack(remoteStream);
-    if(remoteAudioTrack) {
+    if (remoteAudioTrack) {
       remoteAudioTrack.enabled = !mute;
-      if(props.onRemoteAudioStateChanged) {
+      if (props.onRemoteAudioStateChanged) {
         props.onRemoteAudioStateChanged({ mute });
       }
     }
@@ -321,21 +321,21 @@ const VertoView = (props: Props) => {
   }
 
   const muteVideo = (mute: boolean) => {
-    if(!localStream || mute == null) {
+    if (!localStream || mute == null) {
       return;
     }
 
     const localVideoTrack = getVideoTrack(localStream);
-    if(localVideoTrack) {
+    if (localVideoTrack) {
       localVideoTrack.enabled = !mute;
-      if(props.onVideoStateChanged) {
+      if (props.onVideoStateChanged) {
         props.onVideoStateChanged({ mute });
       }
     }
   }
 
   const switchCamera = () => {
-    if(!localStream || !localStream.getVideoTracks()) {
+    if (!localStream || !localStream.getVideoTracks()) {
       return;
     }
 
@@ -350,7 +350,7 @@ const VertoView = (props: Props) => {
 
   const callHandler = (callee: string) => {
     printLog(props.showLogs, '[vertoView] activeCall.current is null?', (activeCall.current == null));
-    if(activeCall.current) {
+    if (activeCall.current) {
       return;
     }
 
@@ -363,30 +363,30 @@ const VertoView = (props: Props) => {
       ...props.callParams,
       to: callee
     };
-    
+
     const newCall = VertoInstanceManager.makeCall(callParams);
     printLog(props.showLogs, '[vertoView] callHandler newCall is null?', (newCall == null));
     activeCall.current = newCall;
     printLog(props.showLogs, '[vertoView] callHandler activeCall is null?', (activeCall.current == null));
     setCall(newCall);
-    if(props.onCallRequested) {
+    if (props.onCallRequested) {
       props.onCallRequested(newCall);
     }
   }
 
   const hangUpHandler = () => {
     printLog(props.showLogs, '[vertoView] hangUpHandler call is null?', (call == null));
-    if(call && call.getId()) {
+    if (call && call.getId()) {
       VertoInstanceManager.hangUpCall(call);
       activeCall.current = null;
-      if(props.onCallHangup) {
+      if (props.onCallHangup) {
         props.onCallHangup(call);
       }
     }
   }
 
   const handleLogout = () => {
-    if(props.onLogoutClicked) {
+    if (props.onLogoutClicked) {
       props.onLogoutClicked();
     }
   }
@@ -402,30 +402,37 @@ const VertoView = (props: Props) => {
     const localAudioTrack = localStream && localStream.getAudioTracks() && localStream.getAudioTracks()[0];
     localAudioTrack.enabled = !localAudioTrack.enabled;
 
-    if(localAudioTrack.enabled) {
+    if (localAudioTrack.enabled) {
       setAudioFileIndex(ToolboxImage.Audio);
     } else {
       setAudioFileIndex(ToolboxImage.NoAudio);
     }
 
-    if(props.onMicrophoneMuted) {
+    if (props.onMicrophoneMuted) {
       props.onMicrophoneMuted(localAudioTrack.muted);
     }
   }
 
   const videoSwitchHandler = () => {
+    // burak
+    console.log("index.tsx => localStream: " + JSON.stringify(localStream))
     const localVideoTrack = localStream && localStream.getVideoTracks() && localStream.getVideoTracks()[0];
-    localVideoTrack.enabled = !localVideoTrack.enabled;
+    console.log("index.tsx => localVideoTrack: " + localVideoTrack)
 
-    if(localVideoTrack.enabled) {
-      setVideoFileIndex(ToolboxImage.Video);
-      setViewType(ViewType.both);
+    if (localVideoTrack == null) {
+      VertoInstanceManager.startLocalStream(call.getId(), 'video')
     } else {
-      setVideoFileIndex(ToolboxImage.NoVideo);
-      setViewType(ViewType.remote);
+      localVideoTrack.enabled = !localVideoTrack.enabled;
+      if (localVideoTrack.enabled) {
+        setVideoFileIndex(ToolboxImage.Video);
+        setViewType(ViewType.both);
+      } else {
+        setVideoFileIndex(ToolboxImage.NoVideo);
+        setViewType(ViewType.remote);
+      }
     }
 
-    if(props.onVideoMuted) {
+    if (props.onVideoMuted) {
       props.onVideoMuted(localVideoTrack.muted);
     }
   }
@@ -435,21 +442,21 @@ const VertoView = (props: Props) => {
   return (
     <View style={styles.container}>
       {
-        !isStreamStarted 
+        !isStreamStarted
           ? props.isCallScreenVisible === undefined || props.isCallScreenVisible === false
-            ? (props.indicatorVisible === undefined && props.indicatorVisible && <ActivityIndicator 
-              color={props.indicatorColor ? props.indicatorColor : 'black'} 
-              style={{flex: 1, alignSelf: 'center', justifyContent: 'center'}} 
+            ? (props.indicatorVisible === undefined && props.indicatorVisible && <ActivityIndicator
+              color={props.indicatorColor ? props.indicatorColor : 'black'}
+              style={{ flex: 1, alignSelf: 'center', justifyContent: 'center' }}
             />)
             :
             (
               <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                   {
-                    hasIncomingCall 
-                      ? <NewCallScreen 
-                        callFrom={incomingCall.getCallerIdentification()} 
-                        onAnswerAccepted={acceptIncomingCall} 
+                    hasIncomingCall
+                      ? <NewCallScreen
+                        callFrom={incomingCall.getCallerIdentification()}
+                        onAnswerAccepted={acceptIncomingCall}
                         onAnswerRejected={rejectIncomingCall}
                       />
                       : <DialScreen callHandler={callHandler} />
@@ -460,16 +467,16 @@ const VertoView = (props: Props) => {
                 </View>
               </View>
             )
-          : 
+          :
           (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               {
-                viewType == ViewType.remote && 
-                <ViewContainer 
-                  containerStyle={styles.streamContainer} 
-                  objectFit={'cover'} 
-                  streamURL={remoteStreamURL} 
-                  viewStyle={styles.stream} 
+                viewType == ViewType.remote &&
+                <ViewContainer
+                  containerStyle={styles.streamContainer}
+                  objectFit={'cover'}
+                  streamURL={remoteStreamURL}
+                  viewStyle={styles.stream}
                   isToolboxAvailable={true}
                   isToolboxVisible={props.isToolboxVisible}
                   audioFileIndex={audioFileIndex}
@@ -481,11 +488,11 @@ const VertoView = (props: Props) => {
               }
               {
                 viewType == ViewType.local &&
-                <ViewContainer 
-                  containerStyle={styles.streamContainer} 
-                  objectFit={'cover'} 
-                  streamURL={localStreamURL} 
-                  viewStyle={styles.stream} 
+                <ViewContainer
+                  containerStyle={styles.streamContainer}
+                  objectFit={'cover'}
+                  streamURL={localStreamURL}
+                  viewStyle={styles.stream}
                   isToolboxAvailable={true}
                   isToolboxVisible={props.isToolboxVisible}
                   audioFileIndex={audioFileIndex}
@@ -496,13 +503,13 @@ const VertoView = (props: Props) => {
                 />
               }
               {
-                viewType == ViewType.both && 
-                <View style={{flex: 1}}>
-                  <ViewContainer 
-                    containerStyle={styles.remoteStreamContainer} 
-                    objectFit={'cover'} 
-                    streamURL={remoteStreamURL} 
-                    viewStyle={styles.stream} 
+                viewType == ViewType.both &&
+                <View style={{ flex: 1 }}>
+                  <ViewContainer
+                    containerStyle={styles.remoteStreamContainer}
+                    objectFit={'cover'}
+                    streamURL={remoteStreamURL}
+                    viewStyle={styles.stream}
                     isToolboxAvailable={true}
                     isToolboxVisible={props.isToolboxVisible}
                     audioFileIndex={audioFileIndex}
@@ -511,11 +518,11 @@ const VertoView = (props: Props) => {
                     hangupHandler={hangUpHandler}
                     videoSwitchHandler={videoSwitchHandler}
                   />
-                  <ViewContainer 
-                    containerStyle={props.isToolboxVisible ? [styles.localStreamContainer, styles.localStreamContainerUp] : styles.localStreamContainer} 
-                    objectFit={'contain'} 
-                    streamURL={localStreamURL} 
-                    viewStyle={styles.stream} 
+                  <ViewContainer
+                    containerStyle={props.isToolboxVisible ? [styles.localStreamContainer, styles.localStreamContainerUp] : styles.localStreamContainer}
+                    objectFit={'contain'}
+                    streamURL={localStreamURL}
+                    viewStyle={styles.stream}
                     isToolboxAvailable={false}
                     isToolboxVisible={props.isToolboxVisible}
                   />
