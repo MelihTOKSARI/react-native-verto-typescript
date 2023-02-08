@@ -1,5 +1,5 @@
 import FSRTCPeerConnection from './FSRTCPeerConnection';
-import { mediaDevices, MediaStream, MediaStreamTrack, RTCOfferOptions } from 'react-native-webrtc';
+import { mediaDevices, MediaStream, MediaStreamTrack } from 'react-native-webrtc';
 import MediaDeviceItemInfo from '../models/MediaDeviceItemInfo';
 import VertoRTCOptions from '../models/VertoRTC/VertoRTCOptions';
 import VertoRTCMediaData from '../models/VertoRTC/VertoRTCMediaData';
@@ -83,7 +83,7 @@ export default class VertoRTC {
 
   public answer(sdp: string, onSuccess?: (value: any) => any, onError?: (reason: any) => PromiseLike<never>): void {
     const sessionDescription = new RTCSessionDescription({ sdp, type: 'answer' });
-    this.peer.addAnswerSDP(sessionDescription , onSuccess, onError);
+    this.peer.addAnswerSDP(sessionDescription, onSuccess, onError);
   }
 
   public stopPeer(): void {
@@ -113,13 +113,13 @@ export default class VertoRTC {
     } = this;
 
     if (useVideo) {
-      if (this.options.mediaHandlers &&  this.options.mediaHandlers.stopRemoteVideo) {
+      if (this.options.mediaHandlers && this.options.mediaHandlers.stopRemoteVideo) {
         this.options.mediaHandlers.stopRemoteVideo();
       }
     }
 
     if (localVideo) {
-      if (this.options.mediaHandlers &&  this.options.mediaHandlers.stopLocalVideo) {
+      if (this.options.mediaHandlers && this.options.mediaHandlers.stopLocalVideo) {
         this.options.mediaHandlers.stopLocalVideo();
       }
     }
@@ -183,7 +183,7 @@ export default class VertoRTC {
     if (minHeight !== undefined && maxHeight !== undefined) {
       dimensions.height = { min: minHeight, max: maxHeight };
     }
-    
+
     if (useCamera === 'any') {
       return { ...dimensions };
     }
@@ -216,7 +216,7 @@ export default class VertoRTC {
   }
 
   public removeLocalStreamTracks() {
-    if(this.localStream == null) {
+    if (this.localStream == null) {
       return;
     }
 
@@ -228,13 +228,13 @@ export default class VertoRTC {
   }
 
   public removeLocalTracks(kind?: string) {
-    if(this.localStream == null || (kind !== 'audio' && kind !== 'video')) {
+    if (this.localStream == null || (kind !== 'audio' && kind !== 'video')) {
       return;
     }
 
     this.removedTracks = kind ? this.removedTracks.filter(track => track.kind != kind) : []
     this.localStream.getTracks().forEach((track: MediaStreamTrack) => {
-      if(!kind || track.kind === kind) {
+      if (!kind || track.kind === kind) {
         this.removedTracks.push(track);
         this.localStream.removeTrack(track)
       }
@@ -242,12 +242,12 @@ export default class VertoRTC {
   }
 
   public reAddLocalTracks(kind?: string) {
-    if(this.localStream == null || (kind !== 'audio' && kind !== 'video')) {
+    if (this.localStream == null || (kind !== 'audio' && kind !== 'video')) {
       return;
     }
 
     this.removedTracks.forEach((track: MediaStreamTrack) => {
-      if(!kind || track.kind === kind) {
+      if (!kind || track.kind === kind) {
         this.localStream.addTrack(track);
       }
     })
@@ -256,11 +256,11 @@ export default class VertoRTC {
   }
 
   public reAddLocalStreamTracks() {
-    if(this.localStream == null) {
+    if (this.localStream == null) {
       return;
     }
 
-    if(this.removedTracks) {
+    if (this.removedTracks) {
       this.removedTracks.forEach((track: MediaStreamTrack) => {
         this.localStream.addTrack(track);
       })
@@ -322,7 +322,7 @@ export default class VertoRTC {
   //   }
   // }
 
-  private getPeerConstraints(): RTCOfferOptions {
+  private getPeerConstraints(): any {
     return {
       offerToReceiveAudio: this.options.useSpeak !== 'none',
       offerToReceiveVideo: !!this.options.useVideo,

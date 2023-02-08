@@ -41,11 +41,11 @@ class CallKeepHelper {
         }, 1000);
     };
 
-    private audioSessionActivated = (data: any) => {
-        // you might want to do following things when receiving this event:
-        // - Start playing ringback if it is an outgoing call
-        printLog(this.showLogs, `[CallKeepHelper-audioSessionActivated] data ${data}`);
-    };
+    // private audioSessionActivated = (data: any) => {
+    //     // you might want to do following things when receiving this event:
+    //     // - Start playing ringback if it is an outgoing call
+    //     printLog(this.showLogs, `[CallKeepHelper-audioSessionActivated] data ${data}`);
+    // };
 
     private didPerformDTMFAction = ({ callUUID, digits }) => {
         const number = this.calls.get(callUUID);
@@ -117,7 +117,7 @@ class CallKeepHelper {
         RNCallKeep.addEventListener('didPerformSetMutedCallAction', this.didPerformSetMutedCallAction);
         RNCallKeep.addEventListener('didToggleHoldCallAction', this.didToggleHoldCallAction);
         RNCallKeep.addEventListener('endCall', this.endCall);
-        RNCallKeep.addEventListener('didActivateAudioSession', this.audioSessionActivated);
+       // RNCallKeep.addEventListener('didActivateAudioSession', this.audioSessionActivated);
         if(Platform.OS === 'android') {
             RNCallKeep.addEventListener('showIncomingCallUi', this.showIncomingCallUI)
         }

@@ -34,19 +34,23 @@
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize">
-        <intent-filter>
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true"
+        >
+        <intent-filter android:exported="true">
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="true" />
 
       <service android:name="io.wazo.callkeep.VoiceConnectionService"
         android:label="Wazo"
         android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-        android:foregroundServiceType="phoneCall">
-        <intent-filter>
+        android:foregroundServiceType="phoneCall"
+        android:exported="true"
+        >
+        <intent-filter android:exported="true">
           <action android:name="android.telecom.ConnectionService" />
         </intent-filter>
       </service>

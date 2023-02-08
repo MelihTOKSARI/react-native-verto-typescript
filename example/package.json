@@ -11,11 +11,12 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.11",
     "react": "17.0.2",
-    "react-native": "0.66.3",
+    "react-native": "0.66.5",
     "react-native-background-timer": "^2.4.1",
-    "react-native-callkeep": "^4.3.3",
+    "react-native-callkeep": "^4.3.6",
     "react-native-uuid": "^2.0.1",
-    "react-native-webrtc": "^1.92.2",
+    "react-native-webrtc": "106.0.4",
+    "stacktrace-parser": "0.1.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
